@@ -1,0 +1,265 @@
+/* Button hover specimens. One base, 36 hover mechanisms, black and white only.
+   Rest state is identical for every specimen; everything an effect needs is
+   hidden until hover. Label uses mix-blend-mode: difference so it stays legible
+   on every frame of every fill or sweep. Greys appear only inside shadows. */
+
+:root{--dur:1}
+
+.fx{
+  position:relative;isolation:isolate;box-sizing:border-box;
+  width:160px;height:48px;margin:0;padding:0;
+  border:2px solid #000;border-radius:0;background:#fff;color:#000;
+  font:600 14px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;cursor:pointer;display:inline-grid;place-items:center;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform calc(.35s*var(--dur)) ease,box-shadow calc(.35s*var(--dur)) ease,
+    background-color calc(.35s*var(--dur)) ease,border-color calc(.35s*var(--dur)) ease,
+    border-radius calc(.35s*var(--dur)) ease;
+}
+.fx:focus-visible{outline:2px solid #000;outline-offset:4px}
+.fx .label{position:relative;z-index:3;grid-area:1/1;color:#fff;mix-blend-mode:difference;pointer-events:none}
+.fx::before,.fx::after{content:"";position:absolute;box-sizing:border-box;pointer-events:none;transition:all calc(.4s*var(--dur)) ease}
+.fx.clip{overflow:hidden}
+.fx svg{position:absolute;left:-2px;top:-2px;width:calc(100% + 4px);height:calc(100% + 4px);fill:none;stroke:#000;stroke-width:2;pointer-events:none}
+
+/* 01 Invert */
+.fx-invert:is(:hover,.hov){background:#000}
+
+/* 02 Lines retract */
+.fx-lines{border-top-color:transparent;border-bottom-color:transparent;transition-delay:calc(.3s*var(--dur))}
+.fx-lines::before,.fx-lines::after{left:-2px;right:-2px;height:2px;background:#000;transition:transform calc(.3s*var(--dur)) ease}
+.fx-lines::before{top:-2px}
+.fx-lines::after{bottom:-2px}
+.fx-lines:is(:hover,.hov){background:#000}
+.fx-lines:is(:hover,.hov)::before,.fx-lines:is(:hover,.hov)::after{transform:scaleX(0)}
+
+/* 03 Halo */
+.fx-halo::after{inset:-24px -42px;border:2px solid #000;opacity:0}
+.fx-halo:is(:hover,.hov)::after{inset:-9px -10px;opacity:1}
+
+/* 04 Border revolve */
+.fx-revolve svg{stroke-dasharray:408 0;stroke-dashoffset:0;transition:stroke-dasharray calc(.4s*var(--dur)) ease,stroke-dashoffset calc(1.2s*var(--dur)) linear}
+.fx-revolve:is(:hover,.hov){border-color:transparent}
+.fx-revolve:is(:hover,.hov) svg{stroke-dasharray:68 340;stroke-dashoffset:-408}
+
+/* 05 Dot to pill */
+.fx-dot::before{left:6px;top:6px;width:32px;height:32px;border-radius:16px;background:#000;transform:scale(0);transition:transform calc(.2s*var(--dur)) ease,width calc(.4s*var(--dur)) ease}
+.fx-dot:is(:hover,.hov)::before{transform:none;width:calc(100% - 12px);transition-delay:0s,calc(.15s*var(--dur))}
+
+/* 06 Curtain drop */
+.fx-curtain::after{inset:0;background:#000;transform:translateY(-101%)}
+.fx-curtain:is(:hover,.hov)::after{transform:none}
+
+/* 07 Scale */
+.fx-scale:is(:hover,.hov){transform:scale(1.1)}
+
+/* 08 Tilt bounce */
+.fx-tilt{transition-duration:calc(.5s*var(--dur));transition-timing-function:cubic-bezier(.68,-.55,.265,1.55)}
+.fx-tilt:is(:hover,.hov){transform:scale(1.15) rotate(-4deg)}
+
+/* 09 Lift */
+.fx-lift:is(:hover,.hov){transform:translateY(-8px)}
+
+/* 10 Crossed frames */
+.fx-cross::before{inset:-2px 78px;border:2px solid #000;opacity:0}
+.fx-cross::after{inset:22px -2px;border:2px solid #000;opacity:0}
+.fx-cross:is(:hover,.hov)::before{inset:-2px -18px;opacity:1}
+.fx-cross:is(:hover,.hov)::after{inset:-18px -2px;opacity:1}
+
+/* 11 Dash sweep */
+.fx-dash svg{stroke-dasharray:408 0;stroke-dashoffset:0;transition:stroke-dasharray calc(.4s*var(--dur)) ease,stroke-dashoffset calc(.9s*var(--dur)) ease-in-out}
+.fx-dash:is(:hover,.hov){border-color:transparent}
+.fx-dash:is(:hover,.hov) svg{stroke-dasharray:102 102;stroke-dashoffset:-204}
+
+/* 12 Press in */
+.fx-press{box-shadow:inset 0 0 0 rgba(0,0,0,.35)}
+.fx-press:is(:hover,.hov){transform:translateY(3px) scale(.97);box-shadow:inset 0 3px 6px rgba(0,0,0,.35)}
+
+/* 13 Split sides */
+.fx-split::before{inset:-2px;border-top:2px solid #000;border-bottom:2px solid #000}
+.fx-split::after{inset:-2px;border-left:2px solid #000;border-right:2px solid #000}
+.fx-split:is(:hover,.hov){border-color:transparent}
+.fx-split:is(:hover,.hov)::before{inset:-5px -10px}
+.fx-split:is(:hover,.hov)::after{transform:scaleY(0)}
+
+/* 14 Sides close */
+.fx-sides{box-shadow:inset 0 0 0 0 #000,inset 0 0 0 0 #000}
+.fx-sides:is(:hover,.hov){box-shadow:inset 80px 0 0 0 #000,inset -80px 0 0 0 #000}
+
+/* 15 Lift with shadow */
+.fx-liftsh{box-shadow:0 0 0 0 rgba(0,0,0,.55)}
+.fx-liftsh:is(:hover,.hov){transform:translateY(-6px);box-shadow:0 14px 10px -8px rgba(0,0,0,.55)}
+
+/* 16 Inset fill */
+.fx-inset{box-shadow:inset 0 0 0 0 #000}
+.fx-inset:is(:hover,.hov){box-shadow:inset 0 0 0 30px #000}
+
+/* 17 Hard shadow */
+.fx-slab{box-shadow:0 0 0 0 #000}
+.fx-slab:is(:hover,.hov){box-shadow:8px -8px 0 0 #000}
+
+/* 18 Split swipe */
+.fx-swipe::before{top:0;right:0;height:50%;width:0;background:#000}
+.fx-swipe::after{bottom:0;left:0;height:50%;width:0;background:#000}
+.fx-swipe:is(:hover,.hov)::before,.fx-swipe:is(:hover,.hov)::after{width:100%}
+
+/* 19 Corner blob */
+.fx-blob::after{width:360px;height:360px;left:-180px;top:-180px;border-radius:50%;background:#000;transform:scale(0);transition:transform calc(.5s*var(--dur)) ease}
+.fx-blob:is(:hover,.hov)::after{transform:none}
+
+/* 20 Border draw */
+.fx-draw::before,.fx-draw::after{width:0;height:0;border:0 solid transparent;transition:width calc(.2s*var(--dur)) linear,height calc(.2s*var(--dur)) linear,border-color 0s}
+.fx-draw::before{top:-2px;left:-2px;border-top-width:2px;border-right-width:2px;transition-delay:calc(.2s*var(--dur)),0s,calc(.4s*var(--dur))}
+.fx-draw::after{bottom:-2px;right:-2px;border-bottom-width:2px;border-left-width:2px;transition-delay:0s,calc(.2s*var(--dur)),calc(.4s*var(--dur))}
+.fx-draw:is(:hover,.hov){border-color:#fff;transition-duration:0s}
+.fx-draw:is(:hover,.hov)::before,.fx-draw:is(:hover,.hov)::after{width:calc(100% + 4px);height:calc(100% + 4px);border-color:#000}
+.fx-draw:is(:hover,.hov)::before{transition-delay:0s,calc(.2s*var(--dur)),0s}
+.fx-draw:is(:hover,.hov)::after{transition-delay:calc(.4s*var(--dur)),calc(.6s*var(--dur)),0s}
+
+/* 21 Flip */
+.fx-flip{border-color:transparent;background:transparent;perspective:420px}
+.fx-flip .flip{position:absolute;inset:-2px;transform-style:preserve-3d;transition:transform calc(.6s*var(--dur)) ease}
+.fx-flip .face{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;border:2px solid #000;background:#fff;color:#000;backface-visibility:hidden}
+.fx-flip .back{background:#000;color:#fff;transform:rotateY(180deg)}
+.fx-flip:is(:hover,.hov) .flip{transform:rotateY(180deg)}
+
+/* 22 Liquid fill */
+.fx-liquid .wave{position:absolute;inset:0;z-index:1;pointer-events:none}
+.fx-liquid .wave i{position:absolute;bottom:0;width:40%;height:100%;border-radius:50%;background:#000;transform:scale(1.8) translateY(125%);transition:transform calc(.9s*var(--dur)) ease}
+.fx-liquid .wave i:nth-child(1){left:-10%}
+.fx-liquid .wave i:nth-child(2){left:30%;transition-delay:calc(.2s*var(--dur))}
+.fx-liquid .wave i:nth-child(3){left:70%;transition-delay:calc(.35s*var(--dur))}
+.fx-liquid:is(:hover,.hov) .wave i{transform:scale(1.7) translateY(0)}
+
+/* 23 Gooey (needs the #goo SVG filter in the page) */
+.goo{display:inline-block;line-height:0}
+.goo:has(.fx:hover),.goo:has(.fx.hov){filter:url(#goo)}
+.fx-goo::before,.fx-goo::after{width:36px;height:60px;border-radius:50%;background:#000;transform:scale(0);transition:transform calc(.8s*var(--dur)) ease}
+.fx-goo::before{top:-40%;left:8%}
+.fx-goo::after{bottom:-40%;right:8%}
+.fx-goo:is(:hover,.hov){background:#000}
+.fx-goo:is(:hover,.hov)::before,.fx-goo:is(:hover,.hov)::after{transform:none}
+
+/* 24 Fill sideways */
+.fx-fillx::after{inset:0;background:#000;transform:scaleX(0)}
+.fx-fillx:is(:hover,.hov)::after{transform:none}
+
+/* 25 Fill vertical */
+.fx-filly::after{inset:0;background:#000;transform:scaleY(0)}
+.fx-filly:is(:hover,.hov)::after{transform:none}
+
+/* 26 Diagonal sweep */
+.fx-diag::after{left:50%;top:50%;width:300px;height:0;background:#000;transform:translate(-50%,-50%) rotate(-45deg);transition:height calc(.45s*var(--dur)) ease}
+.fx-diag:is(:hover,.hov)::after{height:170px}
+
+/* 27 Skew wipe */
+.fx-skew::after{top:0;bottom:0;left:-20%;width:140%;background:#000;transform:translateX(105%) skewX(-20deg)}
+.fx-skew:is(:hover,.hov)::after{transform:translateX(0) skewX(-20deg)}
+
+/* 28 Frame out */
+.fx-frameout::after{inset:-2px;border:2px solid #000}
+.fx-frameout:is(:hover,.hov){background:#000}
+.fx-frameout:is(:hover,.hov)::after{inset:-14px}
+
+/* 29 Radius morph */
+.fx-radius:is(:hover,.hov){border-radius:24px}
+
+/* 30 Glow */
+.fx-glow{box-shadow:0 0 0 0 rgba(0,0,0,.5)}
+.fx-glow:is(:hover,.hov){box-shadow:0 0 18px 4px rgba(0,0,0,.5)}
+
+/* 31 Label slide */
+.fx-slide .label{mix-blend-mode:normal;color:#000;transition:transform calc(.4s*var(--dur)) ease,opacity calc(.4s*var(--dur)) ease}
+.fx-slide .l2{transform:translateX(-160%);opacity:0}
+.fx-slide:is(:hover,.hov) .l1{transform:translateX(160%);opacity:0}
+.fx-slide:is(:hover,.hov) .l2{transform:none;opacity:1}
+
+/* 32 Wipe */
+.fx-wipe::after{inset:0;background:#000;transform:translateX(-101%)}
+.fx-wipe:is(:hover,.hov)::after{transform:none}
+
+/* 33 Perspective tilt */
+.fx-persp{transform:perspective(600px) rotateX(0) rotateY(0)}
+.fx-persp:is(:hover,.hov){transform:perspective(600px) rotateX(10deg) rotateY(-10deg)}
+
+/* 34 Corner marks */
+.fx-corners .marks{position:absolute;inset:0;pointer-events:none}
+.fx-corners .marks i{position:absolute;width:8px;height:8px;border:0 solid #000;opacity:0;transition:all calc(.3s*var(--dur)) ease}
+.fx-corners .marks i:nth-child(1){top:-8px;left:-8px;border-width:2px 0 0 2px}
+.fx-corners .marks i:nth-child(2){top:-8px;right:-8px;border-width:2px 2px 0 0}
+.fx-corners .marks i:nth-child(3){bottom:-8px;left:-8px;border-width:0 0 2px 2px}
+.fx-corners .marks i:nth-child(4){bottom:-8px;right:-8px;border-width:0 2px 2px 0}
+.fx-corners:is(:hover,.hov) .marks i{opacity:1;width:12px;height:12px}
+
+/* 35 Tracking */
+.fx-track .label{transition:letter-spacing calc(.35s*var(--dur)) ease}
+.fx-track:is(:hover,.hov) .label{letter-spacing:.2em}
+
+/* 36 Stepped fill */
+.fx-steps::after{inset:0;background:#000;transform:scale(0);transition:transform calc(.4s*var(--dur)) steps(8,end)}
+.fx-steps:is(:hover,.hov)::after{transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  .fx,.fx *,.fx::before,.fx::after{transition-duration:0s!important;transition-delay:0s!important;animation:none!important}
+}
+
+
+/* ---- New CSS, no JavaScript. Six mechanisms the pure CSS section predates.
+   Same base, same gates; each card leans on one recent CSS feature. ---- */
+
+/* Spring easing: the transform transition runs on a linear() curve sampled from a
+   damped spring (damping ratio .18), so the scale overshoots three visible times. */
+.fx-curve{transition-duration:calc(1.2s*var(--dur));transition-timing-function:linear(0, 0.075 1.7%, 0.276 3.3%, 0.557 5%, 0.865 6.7%, 1.152 8.3%, 1.378 10%, 1.518 11.7%, 1.563 13.3%, 1.519 15%, 1.405 16.7%, 1.247 18.3%, 1.073 20%, 0.912 21.7%, 0.786 23.3%, 0.708 25%, 0.683 26.7%, 0.709 28.3%, 0.773 30%, 0.863 31.7%, 0.96 33.3%, 1.051 35%, 1.121 36.7%, 1.165 38.3%, 1.178 40%, 1.164 41.7%, 1.127 43.3%, 1.076 45%, 1.022 46.7%, 0.971 48.3%, 0.931 50%, 0.907 51.7%, 0.9 53.3%, 0.908 55%, 0.929 56.7%, 0.957 58.3%, 0.988 60%, 1.017 61.7%, 1.039 63.3%, 1.052 65%, 1.056 66.7%, 1.052 68.3%, 1.04 70%, 1.024 71.7%, 1.006 73.3%, 0.99 75%, 0.978 76.7%, 0.97 78.3%, 0.968 80%, 0.971 81.7%, 0.978 83.3%, 0.987 85%, 0.997 86.7%, 1.006 88.3%, 1.013 90%, 1.017 91.7%, 1.018 93.3%, 1.016 95%, 1.012 96.7%, 1.007 98.3%, 1 100%)}
+.fx-curve:is(:hover,.hov){transform:scale(1.12)}
+
+/* Conic sweep: a registered <angle> custom property is the transitioned value,
+   and a conic-gradient stop reads it, so the fill sweeps round like a clock hand. */
+@property --fx-conic-a{syntax:"<angle>";inherits:false;initial-value:0deg}
+.fx-conic{--fx-conic-a:0deg;background-image:conic-gradient(#000 var(--fx-conic-a),#fff 0);transition:--fx-conic-a calc(.6s*var(--dur)) ease-in-out}
+.fx-conic:is(:hover,.hov){--fx-conic-a:360deg}
+
+/* Sibling reacts: a black plate sits in the same grid cell before the button, hidden
+   under it. :has() lets the earlier sibling react to the later button's hover. */
+.fx-peer,.fx-peer-mark{grid-area:1/1}
+.fx-peer-mark{width:160px;height:48px;background:#000;transform:scale(1);transition:transform calc(.35s*var(--dur)) ease}
+.fx-peer-mark:has(+ .fx-peer:is(:hover,.hov)){transform:scale(1.1,1.3334)}
+
+/* Display transition: the plate is display:none at rest. transition-behavior:
+   allow-discrete keeps it in the tree until the exit finishes, and @starting-style
+   supplies the frame a display:none element never had, so it can grow in. */
+.fx-emerge::after{display:none;inset:6px;background:#000;transform:scale(0);transition:transform calc(.4s*var(--dur)) ease,display calc(.4s*var(--dur)) allow-discrete}
+.fx-emerge:is(:hover,.hov)::after{display:block;transform:scale(1)}
+@starting-style{.fx-emerge:is(:hover,.hov)::after{transform:scale(0)}}
+
+/* Anchored underline: the stage has no position:relative, so a plain absolute sibling
+   cannot find the button. anchor() resolves against the button's border box directly. */
+.fx-anchor-tip{display:none}
+@supports (anchor-name:--a){
+  .fx-anchor{anchor-name:--fx-anchor}
+  .fx-anchor-tip{display:block;position:absolute;position-anchor:--fx-anchor;left:anchor(left);right:anchor(right);top:anchor(bottom);margin-top:6px;height:6px;background:#000;transform:scaleX(0);transition:transform calc(.35s*var(--dur)) ease}
+  .fx-anchor:is(:hover,.hov)+.fx-anchor-tip{transform:scaleX(1)}
+}
+
+/* Quadrant direction: four transparent triangles split the box; the hovered one names
+   the keyframes the ink starts from. Once the ink covers the pointer its own :hover
+   holds it, so crossing quadrants inside the box does not restart the fill. */
+.fx-quad .q{position:absolute;inset:0;z-index:2}
+.fx-quad .q:nth-of-type(1){clip-path:polygon(0 0,100% 0,50% 50%)}
+.fx-quad .q:nth-of-type(2){clip-path:polygon(100% 0,100% 100%,50% 50%)}
+.fx-quad .q:nth-of-type(3){clip-path:polygon(0 100%,100% 100%,50% 50%)}
+.fx-quad .q:nth-of-type(4){clip-path:polygon(0 0,50% 50%,0 100%)}
+.fx-quad .qfill{position:absolute;inset:0;z-index:2;background:#000;transform:translateY(-101%);transition:transform calc(.35s*var(--dur)) ease;animation-duration:calc(.35s*var(--dur));animation-timing-function:ease;animation-fill-mode:forwards}
+.fx-quad .q:nth-of-type(1):hover~.qfill{animation-name:fx-quad-top}
+.fx-quad .q:nth-of-type(2):hover~.qfill{animation-name:fx-quad-right}
+.fx-quad .q:nth-of-type(3):hover~.qfill{animation-name:fx-quad-bottom}
+.fx-quad .q:nth-of-type(4):hover~.qfill{animation-name:fx-quad-left}
+.fx-quad .qfill:hover,.fx-quad.hov .qfill{transform:none}
+@keyframes fx-quad-top{from{transform:translateY(-101%)}to{transform:none}}
+@keyframes fx-quad-right{from{transform:translateX(101%)}to{transform:none}}
+@keyframes fx-quad-bottom{from{transform:translateY(101%)}to{transform:none}}
+@keyframes fx-quad-left{from{transform:translateX(-101%)}to{transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .fx-peer-mark,.fx-anchor-tip{transition-duration:0s!important}
+  .fx-quad .q:hover~.qfill{transform:none}
+}

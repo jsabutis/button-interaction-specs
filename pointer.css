@@ -1,0 +1,237 @@
+/* Pointer-reactive specimens. The CSS here only builds the parts; every value
+   that moves is written by pointer.js each frame, so nothing has a transition
+   on the property JavaScript drives. Same base, same palette, same rest state. */
+
+.fx[data-p]{transition:none}
+.fx .ink{position:absolute;background:#000;z-index:1;pointer-events:none}
+
+/* 37 Magnet, 43 Pointer tilt, 44 Wobble tilt, 45 Squash: transform only */
+.fx-magnet,.fx-ptilt,.fx-wobble,.fx-squash{will-change:transform}
+.fx-ptilt,.fx-wobble{transform-style:preserve-3d}
+
+/* 38 Label magnet, 46 Label lag, 49 Speed tracking: the label alone moves */
+.fx-maglabel .label,.fx-lag .label,.fx-speed .label{will-change:transform}
+.fx-speed .label{letter-spacing:.08em;padding-left:.08em}
+
+/* 39 Ink bleed: a full black plate, clipped to a disc at the entry point */
+.fx-bleed .ink{inset:-2px;clip-path:circle(0 at 50% 50%)}
+
+/* 40 Follow disc */
+.fx-disc .ink{left:0;top:0;width:68px;height:68px;border-radius:50%;transform:scale(0)}
+
+/* 41 Direction fill, 42 Direction out */
+.fx-dirfill .ink,.fx-dirout .ink{inset:0;transform:translate(-101%,0)}
+
+/* 47 Edge bulge, 48 Elastic frame: the drawn border replaces the CSS one */
+.fx-bulge,.fx-cloth{border-color:transparent}
+.fx-bulge svg,.fx-cloth svg{overflow:visible;stroke-linejoin:round}
+
+/* 50 Press ripple: a ring, not a fade, so no grey enters the palette */
+.fx-ripple{overflow:hidden}
+.fx-ripple .ink{left:50%;top:50%;width:96px;height:96px;border-radius:50%;background:none;border:2px solid #000;transform:translate(-50%,-50%) scale(0);visibility:hidden}
+
+/* 51 Proximity wake: the rule itself thickens as --near rises from 0 to 1.
+   Border-box, so nothing shifts; at rest it is the same 2px as every specimen. */
+.fx-awake{--near:0;border-width:calc(2px + var(--near) * 4px)}
+
+/* 52 Cast shadow: box-shadow offset is written per frame */
+.fx-cast{will-change:box-shadow}
+
+/* 53 Label repel, 56 Slinky: the label, or its letters, move */
+.fx-repel .label{will-change:transform}
+.fx-slinky .label i{display:inline-block;font-style:normal;will-change:transform}
+
+/* 54 Lean, 55 Sway, 57 Dimple, 71 Swell, 72 Rise to meet: transform only */
+.fx-lean,.fx-sway,.fx-dimple,.fx-swell,.fx-rise{will-change:transform}
+
+/* 58 Fill to pointer, 66 Dwell bloom: a full plate, clipped. Plates that are
+   clipped sit at inset:-2px, under the rule, so the clip edge never antialiases
+   against the border and border-box coordinates (ex ey lx ly) land exactly */
+.fx-reach .ink{inset:-2px;clip-path:inset(0 100% 0 0)}
+.fx-dwell .ink{inset:-2px;clip-path:circle(0 at 50% 50%)}
+
+/* 59 Angle wipe: a plate large enough to cover at any angle, parked outside */
+.fx-angle .ink{left:50%;top:50%;width:320px;height:320px;transform:translate(-50%,-50%) rotate(180deg) translateX(260px)}
+
+/* 60 Momentum */
+.fx-momentum .ink{inset:0;transform:translate(-101%,0)}
+
+/* 61 Pinhole: black plate, white hole under the label */
+.fx-pinhole .ink{inset:0;visibility:hidden}
+.fx-pinhole .hole{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:#fff;z-index:2;pointer-events:none;transform:scale(0)}
+
+/* 62 Reticle: hollow ring */
+.fx-reticle .ink{left:0;top:0;width:36px;height:36px;border-radius:50%;background:none;border:2px solid #000;transform:scale(0)}
+
+/* 63 Crosshair */
+.fx-xhair .hx,.fx-xhair .vy{position:absolute;left:0;top:0;background:#000;z-index:1;pointer-events:none}
+.fx-xhair .hx{width:100%;height:2px;transform:scaleX(0)}
+.fx-xhair .vy{width:2px;height:100%;transform:scaleY(0)}
+
+/* 64 Scanner bar */
+.fx-scan .ink{left:0;top:0;width:20px;height:100%;transform:scaleY(0)}
+
+/* 65 Comet: four discs, largest leads */
+.fx-comet .dot{position:absolute;left:0;top:0;border-radius:50%;background:#000;z-index:1;pointer-events:none;transform:scale(0)}
+.fx-comet .d1{width:40px;height:40px}
+.fx-comet .d2{width:28px;height:28px}
+.fx-comet .d3{width:18px;height:18px}
+.fx-comet .d4{width:10px;height:10px}
+
+/* 67 Corner pull, 68 Push in: drawn border replaces the CSS one */
+.fx-cpull,.fx-push{border-color:transparent}
+.fx-cpull svg,.fx-push svg{overflow:visible;stroke-linejoin:round}
+
+/* 69 Gap follows, 70 Bead: drawn border; the gap or bead rides on it */
+.fx-gap,.fx-bead{border-color:transparent}
+.fx-gap svg,.fx-bead svg{overflow:visible}
+.fx-bead circle{fill:#000;stroke:none}
+
+/* ---- variable font. Inter is loaded as a variable font (wght 100..900,
+   opsz 14..32); weight and optical size are written per frame. Per-letter
+   specimens split the label into <i> elements. ---- */
+.fx .label i{display:inline-block;font-style:normal;font-weight:inherit;transform-origin:50% 100%;will-change:transform}
+.fx-bolden .label,.fx-weightx .label,.fx-wspeed .label,.fx-wdwell .label,.fx-holdw .label,.fx-wkeys .label i,.fx-wripple .label i{font-weight:600}
+.fx-opsz .label{font-variation-settings:"opsz" 14}
+.fx-xtrack .label{letter-spacing:.08em}
+.fx-holdw .label{letter-spacing:1.12px}
+.fx-face .label i{transform-origin:50% 60%}
+
+/* ---- hatching and halftone. Fills built from lines, dots and dither cells,
+   all black on the white plate; the pointer writes sizes, never colours. ---- */
+
+/* 87 Hatch fill: the ink plate carries a repeating-linear-gradient written per frame */
+.fx-hatch .ink{inset:0;background:none}
+
+/* 89 Stipple bleed: the solid core is the ink plate clipped to a disc at the entry point */
+.fx-stipple .ink{inset:-2px;clip-path:circle(0 at 50% 50%)}
+
+/* 88 Halftone bloom, 89 Stipple bleed, 90 Dither wipe: an SVG the size of the
+   inner plate; circles and rects are created once and resized per frame */
+.fx-halftone svg,.fx-stipple svg,.fx-dither svg{left:0;top:0;width:100%;height:100%;fill:#000;stroke:none;z-index:1}
+.fx-dither svg{shape-rendering:crispEdges}
+
+/* ---- intent and prediction. Timing and heading decide the fill; the ink
+   plate is the same full black plate, clipped or rotated per frame. ---- */
+
+/* Anticipation: full plate, clipped to a disc at the predicted landing point */
+.fx-predict .ink{inset:0;clip-path:circle(0px at 50% 50%)}
+
+/* Hover intent: full plate, clipped to nothing at the centre until committed */
+.fx-intent .ink{inset:0;clip-path:inset(24px 80px)}
+
+/* Exit grace: full plate, clipped to a zero-height band at the middle */
+.fx-linger .ink{inset:0;clip-path:inset(24px 0px)}
+
+/* Approach angle: a plate large enough to cover at any angle, parked outside */
+.fx-heading .ink{left:50%;top:50%;width:320px;height:320px;transform:translate(-50%,-50%) rotate(0deg) translateX(260px)}
+
+/* ---- press, hold and release. Everything here runs from pointerdown; a hover
+   alone writes nothing, so the rest state is the plain button. ---- */
+
+/* Hold to confirm: a plate clipped from the right, opening left to right. It
+   overhangs the padding box by 2px so the clip-path edge never anti-aliases
+   against the border; the button's overflow clip trims it. */
+.fx-confirm .ink{inset:-2px;clip-path:inset(0 100% 0 0)}
+
+/* Press depth by pressure: scale and inner shadow are written per frame */
+.fx-depth{will-change:transform,box-shadow}
+
+/* Drag-off cancel: a full plate parked below the box */
+.fx-dragoff .ink{inset:0;transform:translate(0,101%)}
+
+/* Release bounce, Throw: transform only */
+.fx-rebound,.fx-throw{will-change:transform}
+
+/* ---- keyboard and focus. Nothing here responds to hover: focus, Tab
+   direction and Space or Enter drive the values, written per frame. The
+   base focus ring stays as it is; the effect sits alongside it. ---- */
+
+/* Direction-aware focus: a full plate parked off the left edge; the frame writes the side */
+.fx-tabfill .ink{inset:0;transform:translate(-101%,0)}
+
+/* Key press: transform and inner shadow are written per frame */
+.fx-spacebar{will-change:transform,box-shadow}
+
+/* Focus dwell: weight written per frame, 600 at rest */
+.fx-fdwell .label{font-weight:600}
+
+/* ---- shape morph: the CSS border is transparent and the rule is an SVG
+   path redrawn per frame, so the 2px stroke follows the changed outline.
+   Miter joins, not round, so the rest rectangle has the same square corners
+   as the CSS border; every join in these shapes is wider than 45 degrees. ---- */
+.fx-tail,.fx-notch,.fx-chamfer,.fx-rounds,.fx-shear{border-color:transparent}
+.fx-tail svg,.fx-notch svg,.fx-chamfer svg,.fx-rounds svg,.fx-shear svg{overflow:visible}
+
+
+/* ---- physics beyond springs. Masses, gravity and elastic ties; every value
+   is written per frame and cleared at rest. ---- */
+
+/* Jelly: the drawn outline replaces the CSS border */
+.fx-jelly{border-color:transparent}
+.fx-jelly svg{overflow:visible;stroke-linejoin:round}
+
+/* Pendulum: hangs from the middle of the top edge */
+.fx-pendulum{transform-origin:50% 0;will-change:transform}
+
+/* Rubber band, Weight drop: the label alone moves */
+.fx-rubber .label,.fx-thud .label{will-change:transform}
+
+/* ---- cursor. The pointer itself is the effect: the system cursor is hidden
+   over these three stages and a drawn cursor, a child of the button, takes
+   its place. It may leave the box, so none of these clip. The dot is hidden
+   at rest and shown by pointer.js only while the pointer is over the stage. ---- */
+
+/* Cursor becomes button: an 8px dot that is resized into the full plate */
+.stage:has(.fx-become){cursor:none}
+.fx-become{cursor:none}
+.fx-become .cur{position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:#000;z-index:1;pointer-events:none;visibility:hidden}
+
+/* Sticky cursor: the same dot, moved by transform only */
+.stage:has(.fx-sticky){cursor:none}
+.fx-sticky{cursor:none}
+.fx-sticky .cur{position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:#000;z-index:1;pointer-events:none;visibility:hidden;will-change:transform}
+
+/* Inverting cursor: a white disc in difference blend. The button drops its
+   isolation so the disc blends with the page and reads black on the stage;
+   the label keeps its own difference blend and stays legible over the disc. */
+.stage:has(.fx-lens){cursor:none}
+.fx-lens{cursor:none;isolation:auto}
+.fx-lens .ink{inset:0;visibility:hidden}
+.fx-lens .cur{position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:#fff;mix-blend-mode:difference;z-index:2;pointer-events:none;visibility:hidden;will-change:transform}
+
+/* Reduced motion turns the engine off, so the system cursor must come back */
+@media (prefers-reduced-motion:reduce){
+  .stage:has(.fx-become),.stage:has(.fx-sticky),.stage:has(.fx-lens){cursor:auto}
+  .fx-become,.fx-sticky,.fx-lens{cursor:pointer}
+}
+
+
+/* ---- SVG filters. Each specimen carries its own <filter> in a zero-size SVG
+   inside the button, referenced by url(#id). The primitive's attribute is
+   written per frame; the filter property is cleared at rest so the resting
+   render is the plain button, pixel for pixel. ---- */
+.fx-displace .fdef,.fx-dilate .fdef,.fx-thresh .fdef{position:absolute;left:0;top:0;width:0;height:0;overflow:hidden}
+.fx-displace,.fx-thresh{will-change:filter}
+.fx-dilate .label{will-change:filter}
+
+/* ---- after the press. States that begin on a completed click and return to
+   rest on their own; hovering or resting the pointer does nothing. ---- */
+
+/* Pending fill: a full plate clipped to the progress band, nothing at rest */
+.fx-pending .ink{inset:0;clip-path:inset(0 100% 0 0)}
+
+/* Success check: one path holds the border run, the connector and the check;
+   a zero-length dash hides all of it at rest. The label slides, so it is clipped */
+.fx-check path{stroke-dasharray:0 1000}
+.fx-check .label{will-change:transform}
+
+/* Error settle: transform only */
+.fx-shake{will-change:transform}
+
+/* Undo countdown: a bar along the bottom edge, scaled from its left end */
+.fx-undo .ink{left:0;right:0;bottom:0;height:5px;transform:scaleX(0);transform-origin:0 50%}
+
+/* ---- label content. The word changes, not the box: pointer.js fixes each
+   letter at its rest width once fonts load; glyphs are centred inside it. ---- */
+.fx-scramble .label i,.fx-type .label i,.fx-swap .label i,.fx-case .label i{text-align:center}
