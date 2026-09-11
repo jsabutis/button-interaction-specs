@@ -2,7 +2,7 @@
 
 131 button hover mechanisms, one identical button. Same label, same 160 x 48 box, same 2px rule, black and white only. The only variable is what happens when the pointer arrives.
 
-**[Live catalogue](https://jsabutis.github.io/button-hover-specimens/)**
+**[Live catalogue](https://jsabutis.github.io/button-interaction-specs/)**
 
 No dependencies, no build step to view: open `index.html`. Every card has a `CSS` button, and pointer-driven cards a `JS` button, that shows that specimen's own markup and code, ready to copy.
 
