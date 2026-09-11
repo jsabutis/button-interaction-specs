@@ -297,42 +297,72 @@
     }
   }
 
+  /* ---- 05-shape press helper ---- */
+  /* the pressed form of cornerCut: the same four corner springs, but the
+     target is a flat amount rather than the proximity easing, and with all
+     set every corner takes it instead of only the nearest one. */
+  function cornerHold(s, amp, all) {
+    var mi = 0, m = -1e9, c = [], i, j, ax, ay, w;
+    for (i = 0; i < 4; i++) {
+      ax = s.lxr - CX[i]; ay = s.lyr - CY[i]; w = 1 - Math.sqrt(ax * ax + ay * ay) / 100;
+      if (w > m) { m = w; mi = i; }
+    }
+    for (j = 0; j < 4; j++) { s.m[j].t = (all || j === mi) ? amp : 0; c.push(Math.max(0, step(s.m[j], .18, .70))); }
+    return c;
+  }
+
   /* ---- effects. s carries the shared pointer state; see read() below ---- */
+  /* ---- 01-pointer press helpers: the point a press happened at, so a press
+     state can pin itself there while the pointer keeps moving. A keyboard
+     press has no point, so it falls back to the centre of the button. ---- */
+  function ppt(s) { s.pxp = s.inside ? s.lx : W / 2; s.pyp = s.inside ? s.ly : H / 2; }
+
   var PFX = {
 
     /* 37 Magnet: the button drifts toward the pointer, up to 14px, and springs
-       back. Reach extends past the edge so the pull starts before hover. */
+       back. Reach extends past the edge so the pull starts before hover.
+       Press: the pull completes, the plate centre lands under the pointer. */
     magnet: { reach: 90, frame: function (s) {
-      s.a.t = clamp(s.dx * 0.3, -14, 14) * s.near;
-      s.b.t = clamp(s.dy * 0.3, -10, 10) * s.near;
+      var d = s.down || s.kdown;
+      s.a.t = clamp(s.dx * (d ? 1 : 0.3), d ? -26 : -14, d ? 26 : 14) * s.near;
+      s.b.t = clamp(s.dy * (d ? 1 : 0.3), d ? -15 : -10, d ? 15 : 10) * s.near;
       s.el.style.transform = 'translate(' + px(step(s.a, .16, .74)) + ',' + px(step(s.b, .16, .74)) + ')';
     } },
 
-    /* 38 Label magnet: the frame is fixed, the label alone leans. */
+    /* 38 Label magnet: the frame is fixed, the label alone leans.
+       Press: the lean carries on past the pointer to the near edge. */
     maglabel: { reach: 70, frame: function (s) {
-      s.a.t = clamp(s.dx * 0.16, -12, 12) * s.near;
-      s.b.t = clamp(s.dy * 0.16, -7, 7) * s.near;
+      var d = s.down || s.kdown;
+      s.a.t = clamp(s.dx * (d ? 1.6 : 0.16), d ? -26 : -12, d ? 26 : 12) * s.near;
+      s.b.t = clamp(s.dy * (d ? 1.6 : 0.16), d ? -11 : -7, d ? 11 : 7) * s.near;
       s.q('.label').style.transform = 'translate(' + px(step(s.a, .14, .76)) + ',' + px(step(s.b, .14, .76)) + ')';
     } },
 
     /* 39 Ink bleed: the fill grows as a disc from the exact point of entry, so
-       two approaches to the same button never fill the same way. */
+       two approaches to the same button never fill the same way.
+       Press: the fill drains back to a disc on the entry point it grew from. */
     bleed: { frame: function (s) {
-      s.a.t = s.inside ? 190 : 0;
-      var r = step(s.a, .085, .72);
+      var d = s.down || s.kdown;
+      s.a.t = d ? 30 : s.inside ? 190 : 0;
+      var r = step(s.a, .085, d ? .62 : .72);
       s.q('.ink').style.clipPath = 'circle(' + Math.max(0, r).toFixed(1) + 'px at ' + px(s.ex) + ' ' + px(s.ey) + ')';
     } },
 
-    /* 40 Follow disc: a black disc tracks the pointer inside the button. */
+    /* 40 Follow disc: a black disc tracks the pointer inside the button.
+       Press: the disc pins where it was pressed and draws in to a bead. */
     disc: { frame: function (s) {
-      s.a.t = s.lx; s.b.t = s.ly; s.c.t = s.inside ? 1 : 0;
+      var d = s.down || s.kdown;
+      if (!d) { s.a.t = s.lx; s.b.t = s.ly; }
+      s.c.t = d ? 0.42 : s.inside ? 1 : 0;
       var d = s.q('.ink');
       d.style.transform = 'translate(' + px(step(s.a, .30, .60) - 34) + ',' + px(step(s.b, .30, .60) - 34) + ') scale(' + step(s.c, .18, .70).toFixed(3) + ')';
-    } },
+    }, init: function (s) { s.a.v = s.a.t = W / 2; s.b.v = s.b.t = H / 2; },
+      keydown: function (s) { if (!s.inside) { s.a.t = W / 2; s.b.t = H / 2; } } },
 
-    /* 41 Direction fill: the fill enters from the edge the pointer crossed. */
+    /* 41 Direction fill: the fill enters from the edge the pointer crossed.
+       Press: the fill backs part way out of the edge it came in by. */
     dirfill: { frame: function (s) {
-      s.a.t = s.inside ? 0 : 1;
+      s.a.t = (s.down || s.kdown) ? 0.62 : s.inside ? 0 : 1;
       var v = step(s.a, .16, .70), e = s.entry;
       var x = e === 'left' ? -v : e === 'right' ? v : 0;
       var y = e === 'top' ? -v : e === 'bottom' ? v : 0;
@@ -340,64 +370,76 @@
     } },
 
     /* 42 Direction out: the fill enters from the crossed edge and leaves by the
-       edge the pointer left through, so it reads as one continuous pass. */
+       edge the pointer left through, so it reads as one continuous pass.
+       Press: the pass starts early, half out by the far edge, and waits. */
     dirout: { frame: function (s) {
-      s.a.t = s.inside ? 0 : 1;
-      var v = step(s.a, .16, .70), e = s.inside ? s.entry : s.exit;
+      var d = s.down || s.kdown, opp = { left: 'right', right: 'left', top: 'bottom', bottom: 'top' };
+      s.a.t = d ? 0.55 : s.inside ? 0 : 1;
+      var v = step(s.a, .16, .70), e = d ? opp[s.entry] : s.inside ? s.entry : s.exit;
       var x = e === 'left' ? -v : e === 'right' ? v : 0;
       var y = e === 'top' ? -v : e === 'bottom' ? v : 0;
       s.q('.ink').style.transform = 'translate(' + (x * 101) + '%,' + (y * 101) + '%)';
     } },
 
-    /* 43 Pointer tilt: a real 3D tilt that tracks the pointer, not a fixed one. */
+    /* 43 Pointer tilt: a real 3D tilt that tracks the pointer, not a fixed one.
+       Press: the same tilt driven near twice as far, as if leaned on. */
     ptilt: { frame: function (s) {
-      s.a.t = s.inside ? -s.ny * 11 : 0;
-      s.b.t = s.inside ? s.nx * 15 : 0;
+      var d = s.down || s.kdown, g = d ? 1.9 : 1;
+      s.a.t = s.inside ? -s.ny * 11 * g : 0;
+      s.b.t = s.inside ? s.nx * 15 * g : 0;
       s.el.style.transform = 'perspective(420px) rotateX(' + step(s.a, .20, .68).toFixed(2) + 'deg) rotateY(' + step(s.b, .20, .68).toFixed(2) + 'deg)';
     } },
 
     /* 44 Wobble tilt: the same tracking with a looser spring, so the plate
-       overshoots and rocks once before it settles under the pointer. */
+       overshoots and rocks once before it settles under the pointer.
+       Press: the rocking is caught and the plate holds dead level. */
     wobble: { frame: function (s) {
-      s.a.t = s.inside ? -s.ny * 13 : 0;
-      s.b.t = s.inside ? s.nx * 18 : 0;
-      s.el.style.transform = 'perspective(420px) rotateX(' + step(s.a, .10, .875).toFixed(2) + 'deg) rotateY(' + step(s.b, .10, .875).toFixed(2) + 'deg)';
+      var d = s.down || s.kdown;
+      s.a.t = s.inside && !d ? -s.ny * 13 : 0;
+      s.b.t = s.inside && !d ? s.nx * 18 : 0;
+      s.el.style.transform = 'perspective(420px) rotateX(' + step(s.a, d ? .22 : .10, d ? .68 : .875).toFixed(2) + 'deg) rotateY(' + step(s.b, d ? .22 : .10, d ? .68 : .875).toFixed(2) + 'deg)';
     } },
 
     /* 45 Squash: the button stretches along the direction of travel and thins
-       across it, by pointer speed. Move slowly and nothing happens. */
+       across it, by pointer speed. Move slowly and nothing happens.
+       Press: the same stretch with the sign flipped, short along travel. */
     squash: { frame: function (s) {
+      var d = s.down || s.kdown;
       var sp2 = Math.min(Math.sqrt(s.vx * s.vx + s.vy * s.vy) / 22, 1);
-      s.a.t = s.inside ? sp2 * 0.26 : 0;
+      s.a.t = d ? -0.11 : s.inside ? sp2 * 0.26 : 0;
       if (s.inside && sp2 > 0.06) s.ang = Math.atan2(s.vy, s.vx) * 180 / Math.PI;
       var k = step(s.a, .22, .66);
       s.el.style.transform = 'rotate(' + s.ang.toFixed(1) + 'deg) scale(' + (1 + k).toFixed(3) + ',' + (1 - k * 0.62).toFixed(3) + ') rotate(' + (-s.ang).toFixed(1) + 'deg)';
     } },
 
     /* 46 Label lag: the label is dragged along behind the pointer and catches up
-       when it stops, like something heavy on a short tether. */
+       when it stops, like something heavy on a short tether.
+       Press: the tether goes taut and the label catches up all the way. */
     lag: { frame: function (s) {
-      s.a.t = s.inside ? clamp(s.lx - W / 2, -30, 30) * 0.5 : 0;
-      s.b.t = s.inside ? clamp(s.ly - H / 2, -14, 14) * 0.5 : 0;
+      var d = s.down || s.kdown, g = d ? 1 : 0.5;
+      s.a.t = s.inside ? clamp(s.lx - W / 2, -30, 30) * g : 0;
+      s.b.t = s.inside ? clamp(s.ly - H / 2, -14, 14) * g : 0;
       s.q('.label').style.transform = 'translate(' + px(step(s.a, .055, .84)) + ',' + px(step(s.b, .055, .84)) + ')';
     } },
 
     /* 47 Edge bulge: the border edge nearest the pointer bows away from it, as
-       if the rule were elastic and the pointer were pressing on it. */
+       if the rule were elastic and the pointer were pressing on it.
+       Press: the same bow driven deeper and over a wider span of the edge. */
     bulge: { svg: 1, frame: function (s) {
-      var t = [0, 0, 0, 0];
-      if (s.inside) {
+      var t = [0, 0, 0, 0], dn = s.down || s.kdown;
+      if (s.inside || dn) {
         var d = [s.ly, W - s.lx, H - s.ly, s.lx];          /* distance to each edge */
-        var m = 0, mi = 0;
-        for (var i = 0; i < 4; i++) { var w = Math.max(0, 1 - d[i] / 26); if (w > m) { m = w; mi = i; } }
-        t[mi] = m * 16;                                      /* positive = away from the pointer */
+        var m = 0, mi = 0, fall = dn ? 70 : 26, amp = dn ? 26 : 16;
+        for (var i = 0; i < 4; i++) { var w = Math.max(0, 1 - d[i] / fall); if (w > m) { m = w; mi = i; } }
+        t[mi] = m * amp;                                     /* positive = away from the pointer */
       }
       for (var j = 0; j < 4; j++) { s.o[j].t = t[j]; step(s.o[j], .22, .66); }
       s.q('path').setAttribute('d', edgePath([s.o[0].v, s.o[1].v, s.o[2].v, s.o[3].v]));
     } },
 
     /* 48 Elastic frame: every edge is slack; all four lean toward the pointer at
-       once, weighted by distance, so the whole outline leans with it. */
+       once, weighted by distance, so the whole outline leans with it.
+       Press: the lean keeps its bias and every edge gathers inward. */
     cloth: { svg: 1, frame: function (s) {
       var t = [0, 0, 0, 0];
       if (s.inside) {
@@ -409,15 +451,17 @@
           t[i] = (ax * nrm[i][0] + ay * nrm[i][1]) / Math.max(dist, 1) * Math.max(0, 1 - dist / 90) * 13;
         }
       }
+      if (s.down || s.kdown) for (var n = 0; n < 4; n++) t[n] = t[n] * 0.4 - 11;   /* press gathers every edge inward */
       for (var j = 0; j < 4; j++) { s.o[j].t = t[j]; step(s.o[j], .12, .78); }
       s.q('path').setAttribute('d', edgePath([s.o[0].v, s.o[1].v, s.o[2].v, s.o[3].v]));
     } },
 
     /* 49 Speed tracking: letter-spacing opens with pointer speed and closes
-       again the moment the pointer rests. */
+       again the moment the pointer rests.
+       Press: the same track run below base, the letters packed tight. */
     speed: { frame: function (s) {
       var v = Math.min(Math.sqrt(s.vx * s.vx + s.vy * s.vy) / 30, 1);
-      s.a.t = s.inside ? 0.08 + v * 0.26 : 0.08;
+      s.a.t = (s.down || s.kdown) ? 0 : s.inside ? 0.08 + v * 0.26 : 0.08;
       s.q('.label').style.letterSpacing = step(s.a, .14, .74).toFixed(3) + 'em';
     }, init: function (s) { s.a.v = s.a.t = 0.08; } },
 
@@ -442,57 +486,70 @@
     } },
 
     /* 52 Cast shadow: the pointer is the light; a hard shadow falls on the far
-       side and shortens as the pointer comes closer. */
+       side and shortens as the pointer comes closer.
+       Press: the light crosses over and the shadow swings to the near side. */
     cast: { reach: 170, frame: function (s) {
-      var d = Math.max(Math.sqrt(s.dx * s.dx + s.dy * s.dy), 1);
-      s.a.t = -s.dx / d * 12 * s.near;
-      s.b.t = -s.dy / d * 12 * s.near;
+      var d = Math.max(Math.sqrt(s.dx * s.dx + s.dy * s.dy), 1), g = (s.down || s.kdown) ? 1 : -1;
+      s.a.t = g * s.dx / d * 12 * s.near;
+      s.b.t = g * s.dy / d * 12 * s.near;
       s.el.style.boxShadow = px(step(s.a, .18, .72)) + ' ' + px(step(s.b, .18, .72)) + ' 0 0 #000';
     } },
 
-    /* 53 Label repel: the frame stays, the label shies away from the pointer. */
+    /* 53 Label repel: the frame stays, the label shies away from the pointer.
+       Press: the shy goes the whole way, the label jammed to the far edge. */
     repel: { reach: 60, frame: function (s) {
-      s.a.t = -clamp(s.dx * 0.18, -14, 14) * s.near;
-      s.b.t = -clamp(s.dy * 0.18, -8, 8) * s.near;
+      var d = s.down || s.kdown;
+      s.a.t = -clamp(s.dx * (d ? 0.9 : 0.18), d ? -28 : -14, d ? 28 : 14) * s.near;
+      s.b.t = -clamp(s.dy * (d ? 0.9 : 0.18), d ? -13 : -8, d ? 13 : 8) * s.near;
       s.q('.label').style.transform = 'translate(' + px(step(s.a, .14, .76)) + ',' + px(step(s.b, .14, .76)) + ')';
     } },
 
-    /* 54 Lean: a 2D skew toward the pointer, the top edge leading. */
+    /* 54 Lean: a 2D skew toward the pointer, the top edge leading.
+       Press: the same skew on the other sign, the top edge falling back. */
     lean: { frame: function (s) {
-      s.a.t = s.inside ? -s.nx * 12 : 0;
+      var d = s.down || s.kdown, sg = s.nx >= 0 ? 1 : -1;
+      s.a.t = d ? sg * Math.max(Math.abs(s.nx) * 14, 6) : s.inside ? -s.nx * 12 : 0;
       s.el.style.transform = 'skewX(' + step(s.a, .16, .72).toFixed(2) + 'deg)';
     } },
 
     /* 55 Sway: rotates against the direction of travel, like a body leaning
-       into a turn, and rights itself when the pointer stops. */
+       into a turn, and rights itself when the pointer stops.
+       Press: the lean of the turn is held at full instead of righting. */
     sway: { frame: function (s) {
-      s.a.t = s.inside ? clamp(-s.vx * 0.45, -8, 8) : 0;
+      if (s.inside && Math.abs(s.vx) > 1.2) s.sgn = s.vx > 0 ? 1 : -1;
+      s.a.t = (s.down || s.kdown) ? -6 * (s.sgn || 1) : s.inside ? clamp(-s.vx * 0.45, -8, 8) : 0;
       s.el.style.transform = 'rotate(' + step(s.a, .12, .80).toFixed(2) + 'deg)';
     } },
 
     /* 56 Slinky: each letter follows the pointer on a looser spring than the
        one before it, so the word stretches out under motion and regathers. */
     slinky: { frame: function (s) {
-      var t = s.inside ? clamp((s.lx - W / 2) * 0.3, -18, 18) : 0;
-      for (var i = 0; i < s.letters.length; i++) {
-        s.m[i].t = t;
+      var d = s.down || s.kdown, n = s.letters.length;
+      var t = (s.inside || d) ? clamp((s.lx - W / 2) * 0.3, -18, 18) : 0;
+      for (var i = 0; i < n; i++) {
+        s.m[i].t = !d ? t : s.inside ? clamp(t * (0.2 + i * 0.5), -30, 30)   /* held: the looseness is held open */
+          : (i - (n - 1) / 2) * 5;                       /* a keyboard press fans the word about its middle */
         s.letters[i].style.transform = 'translateX(' + px(step(s.m[i], .30 - i * .04, .70)) + ')';
       }
     }, init: function (s) { s.letters = s.el.querySelectorAll('.label i'); } },
 
     /* 57 Dimple: the button shrinks a little, pivoting on the pointer itself. */
     dimple: { frame: function (s) {
-      s.a.t = s.inside ? 0.95 : 1; s.b.t = s.lx; s.c.t = s.ly;
+      var d = s.down || s.kdown;
+      s.a.t = d ? 0.90 : s.inside ? 0.95 : 1;
+      s.b.t = d ? s.pxp : s.lx; s.c.t = d ? s.pyp : s.ly;
       s.el.style.transformOrigin = px(step(s.b, .25, .65)) + ' ' + px(step(s.c, .25, .65));
       s.el.style.transform = 'scale(' + step(s.a, .18, .70).toFixed(4) + ')';
-    }, init: function (s) { s.a.v = s.a.t = 1; s.b.v = W / 2; s.c.v = H / 2; } },
+    }, init: function (s) { s.a.v = s.a.t = 1; s.b.v = W / 2; s.c.v = H / 2; }, down: ppt, keydown: ppt },
 
     /* 58 Fill to pointer: the fill comes in from the entry edge and stops at
        the pointer, so it tracks back and forth as the pointer does. */
     reach: { frame: function (s) {
       var e = s.entry, ink = s.q('.ink');
       var horiz = e === 'left' || e === 'right';
-      s.a.t = s.inside ? (horiz ? s.lx : s.ly) : (e === 'left' ? 0 : e === 'right' ? W : e === 'top' ? 0 : H);
+      var d = s.down || s.kdown;
+      s.a.t = d ? (e === 'left' ? W : e === 'right' ? 0 : e === 'top' ? H : 0)   /* held: the fill runs on to the far edge */
+        : s.inside ? (horiz ? s.lx : s.ly) : (e === 'left' ? 0 : e === 'right' ? W : e === 'top' ? 0 : H);
       var f = step(s.a, .20, .68);
       ink.style.clipPath = e === 'left' ? 'inset(0 ' + px(W - f) + ' 0 0)' : e === 'right' ? 'inset(0 0 0 ' + px(f) + ')' :
         e === 'top' ? 'inset(0 0 ' + px(H - f) + ' 0)' : 'inset(' + px(f) + ' 0 0 0)';
@@ -501,16 +558,18 @@
     /* 59 Angle wipe: a straight edge sweeps across along the true angle of
        entry, not the nearest of four sides, and leaves along the exit angle. */
     angle: { frame: function (s) {
-      s.a.t = s.inside ? 0 : 260;
-      var th = s.inside ? s.eth : s.xth;
+      var d = s.down || s.kdown;
+      s.a.t = d ? -260 : s.inside ? 0 : 260;             /* held: the edge carries on out the far side */
+      var th = (s.inside || d) ? s.eth : s.xth;
       s.q('.ink').style.transform = 'translate(-50%,-50%) rotate(' + (th * 180 / Math.PI).toFixed(1) + 'deg) translateX(' + px(step(s.a, .14, .72)) + ')';
     }, init: function (s) { s.a.v = s.a.t = 260; }, enter: function (s) { s.a.v = 260; s.a.vel = 0; } },
 
     /* 60 Momentum: the same edge fill as 41, but it fills at the speed the
        pointer arrived. Enter slowly and it creeps; flick in and it slams. */
     momentum: { frame: function (s) {
-      s.a.t = s.inside ? 0 : 1;
-      var k = s.inside ? 0.05 + Math.min(s.espd / 30, 1) * 0.25 : 0.16;
+      var d = s.down || s.kdown;
+      s.a.t = (s.inside && !d) ? 0 : 1;                  /* held: it leaves the way it came */
+      var k = (s.inside || d) ? 0.05 + Math.min(s.espd / 30, 1) * 0.25 : 0.16;
       var v = step(s.a, k, .70), e = s.entry;
       var x = e === 'left' ? -v : e === 'right' ? v : 0;
       var y = e === 'top' ? -v : e === 'bottom' ? v : 0;
@@ -521,85 +580,107 @@
        pointer; on exit the hole swallows the black. */
     pinhole: { frame: function (s) {
       var ink = s.q('.ink'), hole = s.q('.hole');
-      if (s.inside && !s.pin) { s.pin = 1; s.a.v = 0; s.a.vel = 0; }
-      s.a.t = s.inside ? 22 : 220; s.b.t = s.lx; s.c.t = s.ly;
+      var d = s.down || s.kdown;
+      if ((s.inside || d) && !s.pin) { s.pin = 1; s.a.v = 0; s.a.vel = 0; }
+      s.a.t = d ? 7 : s.inside ? 22 : 220;               /* held: the hole closes to a pinprick */
+      s.b.t = d ? s.pxp : s.lx; s.c.t = d ? s.pyp : s.ly;
       var r = step(s.a, .14, .72);
-      if (!s.inside && r > 200) { s.pin = 0; ink.style.visibility = 'hidden'; hole.style.transform = 'scale(0)'; return; }
+      if (!s.inside && !d && r > 200) { s.pin = 0; ink.style.visibility = 'hidden'; hole.style.transform = 'scale(0)'; return; }
       ink.style.visibility = 'visible';
       hole.style.transform = 'translate(' + px(step(s.b, .30, .60) - 22) + ',' + px(step(s.c, .30, .60) - 22) + ') scale(' + (r / 22).toFixed(3) + ')';
-    } },
+    }, down: ppt, keydown: ppt },
 
     /* 62 Reticle: a hollow ring rides under the pointer. */
     reticle: { frame: function (s) {
-      s.a.t = s.lx; s.b.t = s.ly; s.c.t = s.inside ? 1 : 0;
-      s.q('.ink').style.transform = 'translate(' + px(step(s.a, .30, .60) - 18) + ',' + px(step(s.b, .30, .60) - 18) + ') scale(' + step(s.c, .18, .70).toFixed(3) + ')';
-    } },
+      var d = s.down || s.kdown, ink = s.q('.ink');
+      s.a.t = d ? s.pxp : s.lx; s.b.t = d ? s.pyp : s.ly; s.c.t = (s.inside || d) ? 1 : 0;
+      s.x[0].t = d ? 1 : 0;                              /* held: the ring fills in from its own edge */
+      var f = Math.max(0, step(s.x[0], .16, .70)) * 17;
+      ink.style.boxShadow = f > .05 ? 'inset 0 0 0 ' + px(f) + ' #000' : '';
+      ink.style.transform = 'translate(' + px(step(s.a, .30, .60) - 18) + ',' + px(step(s.b, .30, .60) - 18) + ') scale(' + step(s.c, .18, .70).toFixed(3) + ')';
+    }, init: function (s) { s.x.push(sp()); }, down: ppt, keydown: ppt },
 
     /* 63 Crosshair: a rule through the pointer on each axis, growing out from
        the pointer itself. */
     xhair: { frame: function (s) {
-      s.a.t = s.lx; s.b.t = s.ly; s.c.t = s.inside ? 1 : 0;
+      var d = s.down || s.kdown;
+      s.a.t = d ? s.pxp : s.lx; s.b.t = d ? s.pyp : s.ly; s.c.t = (s.inside || d) ? 1 : 0;
+      s.x[0].t = d ? 1 : 0;                              /* held: the arms run back into the press point */
       var x = step(s.a, .30, .60), y = step(s.b, .30, .60), g = step(s.c, .16, .72);
+      var k = g * (1 - 0.85 * clamp(step(s.x[0], .16, .70), 0, 1));
       var hx = s.q('.hx'), vy = s.q('.vy');
-      hx.style.transformOrigin = px(x) + ' 50%'; hx.style.transform = 'translateY(' + px(y - 1) + ') scaleX(' + g.toFixed(3) + ')';
-      vy.style.transformOrigin = '50% ' + px(y); vy.style.transform = 'translateX(' + px(x - 1) + ') scaleY(' + g.toFixed(3) + ')';
-    } },
+      hx.style.transformOrigin = px(x) + ' 50%'; hx.style.transform = 'translateY(' + px(y - 1) + ') scaleX(' + k.toFixed(3) + ')';
+      vy.style.transformOrigin = '50% ' + px(y); vy.style.transform = 'translateX(' + px(x - 1) + ') scaleY(' + k.toFixed(3) + ')';
+    }, init: function (s) { s.x.push(sp()); }, down: ppt, keydown: ppt },
 
     /* 64 Scanner bar: a full-height bar tracks the pointer sideways. */
     scan: { frame: function (s) {
-      s.a.t = s.lx; s.c.t = s.inside ? 1 : 0;
-      s.q('.ink').style.transform = 'translateX(' + px(step(s.a, .24, .64) - 10) + ') scaleY(' + step(s.c, .18, .70).toFixed(3) + ')';
-    } },
+      var d = s.down || s.kdown;
+      s.a.t = d ? s.pxp : s.lx; s.c.t = (s.inside || d) ? 1 : 0;
+      s.x[0].t = d ? 1 : 0;                              /* held: the bar covers everything it was sampling */
+      var w = 1 + 15 * Math.max(0, step(s.x[0], .16, .62));
+      s.q('.ink').style.transform = 'translateX(' + px(step(s.a, .24, .64) - 10) + ') scaleY(' + step(s.c, .18, .70).toFixed(3) + ') scaleX(' + w.toFixed(3) + ')';
+    }, init: function (s) { s.x.push(sp()); }, down: ppt, keydown: ppt },
 
     /* 65 Comet: four discs follow the pointer on progressively looser
        springs, so a fast pointer draws a tail and a still one a single dot. */
     comet: { frame: function (s) {
-      s.c.t = s.inside ? 1 : 0;
+      var d = s.down || s.kdown;
+      s.c.t = (s.inside || d) ? 1 : 0;
+      s.x[0].t = d ? 1 : 0;                              /* held: the tail motion drew is laid out and kept */
       var g = step(s.c, .18, .70), K = [.34, .22, .14, .09], R = [20, 14, 9, 5];
+      var tl = Math.max(0, step(s.x[0], .12, .70)) * 14, ax = Math.cos(s.eth) * tl, ay = Math.sin(s.eth) * tl;
       for (var i = 0; i < 4; i++) {
-        s.m[i].t = s.lx; s.m[i + 4].t = s.ly;
+        s.m[i].t = (d ? s.pxp : s.lx) + ax * i; s.m[i + 4].t = (d ? s.pyp : s.ly) + ay * i;
         s.dots[i].style.transform = 'translate(' + px(step(s.m[i], K[i], .64) - R[i]) + ',' + px(step(s.m[i + 4], K[i], .64) - R[i]) + ') scale(' + g.toFixed(3) + ')';
       }
-    }, init: function (s) { s.dots = s.el.querySelectorAll('.dot'); } },
+    }, init: function (s) { s.dots = s.el.querySelectorAll('.dot'); s.x.push(sp()); }, down: ppt, keydown: ppt },
 
     /* 66 Dwell bloom: a disc under the pointer grows while the pointer rests
        and shrinks while it moves, so the fill is a measure of hesitation. */
     dwell: { frame: function (s) {
-      if (s.inside) s.dw = clamp(s.dw + (s.spd < 1.5 ? 2.4 : -5), 0, 150); else s.dw = 0;
-      s.a.t = s.dw; s.b.t = s.lx; s.c.t = s.ly;
+      var d = s.down || s.kdown;
+      if (!d) { if (s.inside) s.dw = clamp(s.dw + (s.spd < 1.5 ? 2.4 : -5), 0, 150); else s.dw = 0; }
+      s.a.t = d ? 26 : s.dw;                             /* held: the hesitation collapses onto the point decided on */
+      s.b.t = d ? s.pxp : s.lx; s.c.t = d ? s.pyp : s.ly;
       s.q('.ink').style.clipPath = 'circle(' + Math.max(0, step(s.a, .10, .74)).toFixed(1) + 'px at ' + px(step(s.b, .25, .65)) + ' ' + px(step(s.c, .25, .65)) + ')';
-    }, init: function (s) { s.dw = 0; } },
+    }, init: function (s) { s.dw = 0; }, down: ppt, keydown: ppt },
 
     /* 67 Corner pull: the corner nearest the pointer reaches toward it, from
        outside as the pointer approaches and from inside once it is over. */
     cpull: { reach: 60, svg: 'corner', frame: function (s) {
       var cx = [I, W - I, W - I, I], cy = [I, I, H - I, H - I], c = [];
+      var hd = s.down || s.kdown, tx = hd ? s.pxp : s.lxr, ty = hd ? s.pyp : s.lyr;
       for (var i = 0; i < 4; i++) {
-        var ax = s.lxr - cx[i], ay = s.lyr - cy[i], d = Math.sqrt(ax * ax + ay * ay);
-        var w = s.near ? Math.max(0, 1 - d / 80) * 18 : 0;
+        var ax = tx - cx[i], ay = ty - cy[i], d = Math.sqrt(ax * ax + ay * ay);
+        var w = hd ? Math.min(d * 0.45, 18) : s.near ? Math.max(0, 1 - d / 80) * 18 : 0;   /* held: every corner comes, not just the near one */
         s.m[i].t = d ? ax / d * w : 0; s.m[i + 4].t = d ? ay / d * w : 0;
         c.push([step(s.m[i], .16, .72), step(s.m[i + 4], .16, .72)]);
       }
       s.q('path').setAttribute('d', cornerPath(c));
-    } },
+    }, down: ppt, keydown: ppt },
 
     /* 68 Push in: approach from outside and the edge you are nearing dents
        inward under the pressure; cross it and the dent releases. */
     push: { reach: 70, svg: 1, frame: function (s) {
-      var t = [0, 0, 0, 0];
-      if (!s.inside && s.near) {
-        var i = s.oside === 'top' ? 0 : s.oside === 'right' ? 1 : s.oside === 'bottom' ? 2 : 3;
+      var t = [0, 0, 0, 0], i;
+      if (s.down || s.kdown) {                           /* held: the dent comes back, deeper, from the inside */
+        var ds = [s.pyp, W - s.pxp, H - s.pyp, s.pxp], mi = 0;
+        for (i = 1; i < 4; i++) if (ds[i] < ds[mi]) mi = i;
+        t[mi] = -18;
+      } else if (!s.inside && s.near) {
+        i = s.oside === 'top' ? 0 : s.oside === 'right' ? 1 : s.oside === 'bottom' ? 2 : 3;
         t[i] = -s.near * 12;
       }
       for (var j = 0; j < 4; j++) { s.o[j].t = t[j]; step(s.o[j], .18, .70); }
       s.q('path').setAttribute('d', edgePath([s.o[0].v, s.o[1].v, s.o[2].v, s.o[3].v]));
-    } },
+    }, down: ppt, keydown: ppt },
 
     /* 69 Gap follows: a gap opens in the border on the side facing the
        pointer and slides round the perimeter to keep facing it. */
     gap: { reach: 100, frame: function (s) {
       aim(s.a, Math.atan2(s.dy, s.dx));
-      s.b.t = s.near * 28;
+      s.b.t = (s.down || s.kdown) ? 130 : s.near * 28;  /* held: the gap opens until the rule is two arcs */
       var th = step(s.a, .14, .74), g = Math.max(0, step(s.b, .16, .72));
       var pos = rimPos(rim(th)), rect = s.q('rect');
       rect.style.strokeDasharray = '0 ' + g.toFixed(2) + ' ' + (PERIM - g).toFixed(2);
@@ -609,8 +690,9 @@
     /* 70 Bead: a bead sits on the border at the point nearest the pointer
        and slides round to stay there. */
     bead: { reach: 100, frame: function (s) {
+      var d = s.down || s.kdown;
       aim(s.a, Math.atan2(s.dy, s.dx));
-      s.b.t = s.near * 5;
+      s.b.t = d ? 14 : s.near * 5;                       /* held: the bead swells into a stud on the rule */
       var p = rim(step(s.a, .14, .74)), c = s.q('circle');
       c.setAttribute('cx', p[0].toFixed(2)); c.setAttribute('cy', p[1].toFixed(2));
       c.setAttribute('r', Math.max(0, step(s.b, .16, .72)).toFixed(2));
@@ -618,14 +700,14 @@
 
     /* 71 Swell: grows as the pointer approaches, by distance, before hover. */
     swell: { reach: 120, frame: function (s) {
-      s.a.t = 1 + s.near * 0.06;
+      s.a.t = (s.down || s.kdown) ? 0.94 : 1 + s.near * 0.06;   /* held: the swell runs back the other way */
       s.el.style.transform = 'scale(' + step(s.a, .14, .74).toFixed(4) + ')';
     }, init: function (s) { s.a.v = s.a.t = 1; } },
 
     /* 72 Rise to meet: lifts off a hard shadow as the pointer approaches, and
        lands the moment the pointer arrives. */
     rise: { reach: 120, frame: function (s) {
-      s.a.t = s.inside ? 0 : s.near;
+      s.a.t = (s.down || s.kdown) ? -1 : s.inside ? 0 : s.near;  /* held: it goes below the plane, shadow overhead */
       var v = step(s.a, .14, .74);
       s.el.style.transform = 'translateY(' + px(-8 * v) + ')';
       s.el.style.boxShadow = '0 ' + px(8 * v) + ' 0 0 #000';
@@ -633,125 +715,162 @@
 
     /* ---- variable font: Inter wght 100..900 and opsz 14..32, plus per-letter transforms ---- */
 
-    /* 73 Bolden: the whole label gains weight as the pointer approaches. */
+    /* 73 Bolden: the whole label gains weight as the pointer approaches.
+       Press flips the axis: the weight carries on past the base, out to the
+       thin end, and comes back to the hover weight on release. */
     bolden: { reach: 120, frame: function (s) {
-      s.a.t = 600 + 300 * s.near;
+      s.a.t = (s.down || s.kdown) ? 300 : 600 + 300 * s.near;
       s.q('.label').style.fontWeight = Math.round(step(s.a, .14, .74));
     }, init: function (s) { s.a.v = s.a.t = 600; } },
 
     /* 74 Tracking by x: letter-spacing follows the pointer across the button,
-       tight at the left edge and wide at the right. */
+       tight at the left edge and wide at the right. Press runs the track on
+       past the pointer, wider than the right edge ever gives. */
     xtrack: { frame: function (s) {
-      s.a.t = s.inside ? 0.02 + (s.lx / W) * 0.28 : 0.08;
+      s.a.t = (s.down || s.kdown) ? 0.34 : s.inside ? 0.02 + (s.lx / W) * 0.28 : 0.08;
       s.q('.label').style.letterSpacing = step(s.a, .16, .72).toFixed(3) + 'em';
     }, init: function (s) { s.a.v = s.a.t = 0.08; } },
 
-    /* 75 Weight by x: thin at the left edge, black at the right. */
+    /* 75 Weight by x: thin at the left edge, black at the right. Press
+       finishes the ramp: the label commits to the end it was heading for. */
     weightx: { frame: function (s) {
-      s.a.t = s.inside ? 300 + (s.lx / W) * 600 : 600;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
+      s.a.t = d ? (x >= W / 2 ? 900 : 300) : s.inside ? 300 + (s.lx / W) * 600 : 600;
       s.q('.label').style.fontWeight = Math.round(step(s.a, .16, .72));
     }, init: function (s) { s.a.v = s.a.t = 600; } },
 
     /* 76 Weight keys: the letter under the pointer goes bold, its neighbours
-       less so, on a bell curve, like keys under a hand. */
+       less so, on a bell curve, like keys under a hand. Press reverses the
+       peak alone: the key taken down goes thin inside the bold shoulders. */
     wkeys: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        s.m[i].t = s.inside ? 600 + 300 * bell(s.cxs[i] - s.lx, 16) : 600;
+        var g = s.cxs[i] - x;
+        s.m[i].t = d ? 600 + 300 * bell(g, 16) - 600 * bell(g, 7) : s.inside ? 600 + 300 * bell(g, 16) : 600;
         s.letters[i].style.fontWeight = Math.round(step(s.m[i], .22, .68));
       }
-    }, init: function (s) { letters(s); seed(s.m, 600); }, enter: centres },
+    }, init: function (s) { letters(s); seed(s.m, 600); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
     /* 77 Dock: the letter under the pointer grows from its baseline, the
-       neighbours a little, the way a dock magnifies. */
+       neighbours a little, the way a dock magnifies. Press resolves the
+       magnification onto one letter: the bell narrows and the rest sit down. */
     dock: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        s.m[i].t = s.inside ? 1 + 0.6 * bell(s.cxs[i] - s.lx, 18) : 1;
+        var g = s.cxs[i] - x;
+        s.m[i].t = d ? 1 + 0.75 * bell(g, 6) : s.inside ? 1 + 0.6 * bell(g, 18) : 1;
         s.letters[i].style.transform = 'scale(' + step(s.m[i], .22, .68).toFixed(3) + ')';
       }
-    }, init: function (s) { letters(s); seed(s.m, 1); }, enter: centres },
+    }, init: function (s) { letters(s); seed(s.m, 1); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
-    /* 78 Keys press: the letter under the pointer sinks like a pressed key. */
+    /* 78 Keys press: the letter under the pointer sinks like a pressed key.
+       Press takes the same key the rest of the way down to its bottom. */
     keys: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        s.m[i].t = s.inside ? 5 * bell(s.cxs[i] - s.lx, 16) : 0;
+        var g = bell(s.cxs[i] - x, 16);
+        s.m[i].t = d ? 10 * g : s.inside ? 5 * g : 0;
         s.letters[i].style.transform = 'translateY(' + px(step(s.m[i], .24, .66)) + ')';
       }
-    }, init: function (s) { letters(s); }, enter: centres },
+    }, init: function (s) { letters(s); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
     /* 79 Weight ripple: on hover every letter heads for bold, each on a
        looser spring than the one before, starting from the side you entered,
-       so the weight travels through the word. */
+       so the weight travels through the word. Press sends a thinning wave
+       back the other way, from the far side to the side you came in. */
     wripple: { frame: function (s) {
-      var fromRight = s.entry === 'right';
+      var d = s.down || s.kdown, back = (s.entry === 'right') !== !!d;
       for (var i = 0; i < 6; i++) {
-        var o = fromRight ? 5 - i : i;
-        s.m[i].t = s.inside ? 900 : 600;
+        var o = back ? 5 - i : i;
+        s.m[i].t = d ? 400 : s.inside ? 900 : 600;
         s.letters[i].style.fontWeight = Math.round(step(s.m[i], .26 - o * .038, .70));
       }
     }, init: function (s) { letters(s); seed(s.m, 600); } },
 
     /* 80 Optical size: Inter's opsz axis, 14 (text) to 32 (display), by
-       distance. Subtle: tighter apertures and spacing as the pointer nears. */
+       distance. Subtle: tighter apertures and spacing as the pointer nears.
+       Press gives most of it back, down to 18, and the display cut returns
+       on release. */
     opsz: { reach: 120, frame: function (s) {
-      s.a.t = 14 + 18 * s.near;
+      s.a.t = (s.down || s.kdown) ? 18 : 14 + 18 * s.near;
       s.q('.label').style.fontVariationSettings = '"opsz" ' + step(s.a, .14, .74).toFixed(2);
     }, init: function (s) { s.a.v = s.a.t = 14; } },
 
     /* 81 Face the pointer: each letter turns toward the pointer, the way a
-       row of heads follows someone walking past. */
+       row of heads follows someone walking past. Press flips every angle:
+       the same heads turn away by the same amount. */
     face: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        s.m[i].t = s.inside ? clamp((s.lx - s.cxs[i]) * 0.5, -24, 24) : 0;
+        var g = clamp((x - s.cxs[i]) * 0.5, -24, 24);
+        s.m[i].t = d ? -g : s.inside ? g : 0;
         s.letters[i].style.transform = 'rotate(' + step(s.m[i], .18, .70).toFixed(2) + 'deg)';
       }
-    }, init: function (s) { letters(s); }, enter: centres },
+    }, init: function (s) { letters(s); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
-    /* 82 Part: letters near the pointer push apart to make room for it. */
+    /* 82 Part: letters near the pointer push apart to make room for it.
+       Press finishes the parting: the bell goes flat and the word opens into
+       two blocks with the press point in the gap. */
     part: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        var d = s.cxs[i] - s.lx;
-        s.m[i].t = s.inside ? (d < 0 ? -1 : 1) * 10 * bell(d, 60) : 0;   /* wide bell: a gap opens, neighbours do not crowd */
+        var g = s.cxs[i] - x, sg = g < 0 ? -1 : 1;
+        s.m[i].t = d ? sg * 20 : s.inside ? sg * 10 * bell(g, 60) : 0;   /* wide bell: a gap opens, neighbours do not crowd */
         s.letters[i].style.transform = 'translateX(' + px(step(s.m[i], .20, .70)) + ')';
       }
-    }, init: function (s) { letters(s); }, enter: centres },
+    }, init: function (s) { letters(s); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
     /* 83 Weight by speed: bolder the faster the pointer moves, back to the
-       base weight the moment it stops. */
+       base weight the moment it stops. Press pays the same weight for a
+       pointer that has stopped: holding stands in for moving. */
     wspeed: { frame: function (s) {
-      s.a.t = s.inside ? 600 + Math.min(s.spd / 30, 1) * 300 : 600;
+      s.a.t = (s.down || s.kdown) ? 900 : s.inside ? 600 + Math.min(s.spd / 30, 1) * 300 : 600;
       s.q('.label').style.fontWeight = Math.round(step(s.a, .14, .74));
     }, init: function (s) { s.a.v = s.a.t = 600; } },
 
-    /* 84 Weight by dwell: bolder the longer the pointer rests on it. */
+    /* 84 Weight by dwell: bolder the longer the pointer rests on it. Press
+       mirrors the dwell about the base weight: a long wait is spent back
+       down to 600, and a press with no wait behind it takes the bold at once. */
     wdwell: { frame: function (s) {
       if (s.inside) s.dw = clamp(s.dw + (s.spd < 1.5 ? 0.016 : -0.04), 0, 1); else s.dw = 0;
-      s.a.t = 600 + 300 * s.dw;
+      s.a.t = 600 + 300 * ((s.down || s.kdown) ? 1 - s.dw : s.dw);
       s.q('.label').style.fontWeight = Math.round(step(s.a, .10, .74));
     }, init: function (s) { s.a.v = s.a.t = 600; s.dw = 0; } },
 
     /* 85 Grass: letters lean away from the pointer, most where it is
-       nearest, like grass parting round a foot. */
+       nearest, like grass parting round a foot. Press leans them further and
+       wider, so the blades at the edge of the word go over too. */
     grass: { frame: function (s) {
       if (!s.cxs) return;
+      var d = s.down || s.kdown, x = s.inside ? s.lx : W / 2;
       for (var i = 0; i < 6; i++) {
-        var d = s.cxs[i] - s.lx;
-        s.m[i].t = s.inside ? (d < 0 ? 1 : -1) * 18 * bell(d, 26) : 0;
+        var g = s.cxs[i] - x, sg = g < 0 ? 1 : -1;
+        s.m[i].t = d ? sg * 28 * bell(g, 40) : s.inside ? sg * 18 * bell(g, 26) : 0;
         s.letters[i].style.transform = 'skewX(' + step(s.m[i], .20, .70).toFixed(2) + 'deg)';
       }
-    }, init: function (s) { letters(s); }, enter: centres },
+    }, init: function (s) { letters(s); }, enter: centres,
+      keydown: function (s) { if (!s.cxs) centres(s); } },
 
     /* 86 Weight holds width: bold on hover, but letter-spacing gives back
-       exactly what the heavier glyphs take, so the word does not grow. */
+       exactly what the heavier glyphs take, so the word does not grow. Press
+       drops the compensation and keeps the weight, so the bold word finally
+       takes the width it costs. */
     holdw: { frame: function (s) {
-      s.a.t = s.inside ? 1 : 0;
-      var t = step(s.a, .16, .72), lab = s.q('.label');
+      var d = s.down || s.kdown, on = d || s.inside;
+      s.a.t = on ? 1 : 0; s.b.t = (on && !d) ? 1 : 0;
+      var t = step(s.a, .16, .72), c = step(s.b, .16, .72), lab = s.q('.label');
       lab.style.fontWeight = Math.round(600 + 300 * t);
-      lab.style.letterSpacing = px(1.12 - (s.gain || 0) / 6 * t);
+      lab.style.letterSpacing = px(1.12 - (s.gain || 0) / 6 * c);
     }, init: function (s) {
       var lab = s.q('.label');
       document.fonts.ready.then(function () {
@@ -767,25 +886,42 @@
     /* 87 Hatch fill: parallel lines, perpendicular to the pointer, thicken
        from nothing at the edge of reach to a solid fill under the pointer. */
     hatch: { reach: 140, frame: function (s) {
+      var d = s.down || s.kdown;
       aim(s.a, Math.atan2(s.dy, s.dx));
-      s.b.t = s.near * PITCH;
+      s.b.t = d ? PITCH : s.near * PITCH;
+      s.c.t = d ? 1 : 0;
       var th = step(s.a, .14, .74) * 180 / Math.PI + 90, t = clamp(step(s.b, .16, .72), 0, PITCH);
-      s.q('.ink').style.backgroundImage = t < .05 ? 'none' :
-        'repeating-linear-gradient(' + th.toFixed(1) + 'deg,#000 0 ' + px(t) + ',transparent ' + px(t) + ' ' + PITCH + 'px)';
+      /* press: the solid fill breaks back into an open hatch at half the pitch,
+         a mid-ramp of its own hover held; a solid core keeps the label legible */
+      var p = clamp(step(s.c, .18, .62), 0, 1), P = PITCH * (1 - .5 * p), t2 = Math.min(t, P) * (1 - .58 * p);
+      var st = s.q('.ink').style, core = p > .005;
+      st.backgroundImage = t2 < .05 && !core ? 'none' :
+        (core ? 'linear-gradient(#000,#000),' : '') +
+        'repeating-linear-gradient(' + th.toFixed(1) + 'deg,#000 0 ' + px(t2) + ',transparent ' + px(t2) + ' ' + P.toFixed(2) + 'px)';
+      st.backgroundRepeat = core ? 'no-repeat,repeat' : '';
+      st.backgroundPosition = core ? 'center,0 0' : '';
+      st.backgroundSize = core ? '106px 22px,auto' : '';
     } },
 
     /* 88 Halftone bloom: a grid of dots; each dot's radius follows a bell
        centred on the pointer, so the dots under it merge into solid black
        and the ones at the far end stay pinpricks. */
     halftone: { reach: 60, frame: function (s) {
-      s.a.t = s.lxr - 2; s.b.t = s.lyr - 2; s.c.t = s.near;
+      /* press: the bell pins to the press point and tightens onto it, so the
+         dots under the finger merge and the far end falls back to pinpricks */
+      var dn = s.down || s.kdown;
+      if (dn && !s.pinned) { s.pinned = 1; s.ppx = s.down ? s.lxr - 2 : W / 2; s.ppy = s.down ? s.lyr - 2 : H / 2; }
+      if (!dn) s.pinned = 0;
+      s.a.t = dn ? s.ppx : s.lxr - 2; s.b.t = dn ? s.ppy : s.lyr - 2; s.c.t = dn ? 1 : s.near;
+      s.x[0].t = dn ? 1 : 0;
       var x = step(s.a, .28, .62), y = step(s.b, .28, .62), g = step(s.c, .16, .72);
+      var p = clamp(step(s.x[0], .16, .70), 0, 1), sig = 26 - 12 * p, amp = 5.8 + 2.4 * p;
       for (var i = 0; i < s.dots.length; i++) {
         var d = s.dots[i], ax = d.x - x, ay = d.y - y;
-        setR(d, g * 5.8 * bell(Math.sqrt(ax * ax + ay * ay), 26));
+        setR(d, g * amp * bell(Math.sqrt(ax * ax + ay * ay), sig));
       }
     }, init: function (s) {
-      var svg = s.q('svg'); s.dots = [];
+      var svg = s.q('svg'); s.dots = []; s.pinned = 0; s.ppx = W / 2; s.ppy = H / 2; s.x.push(sp());
       for (var y = 6; y < H - 4; y += 8) for (var x = 6; x < W - 4; x += 8) s.dots.push(dot(svg, x, y));
     } },
 
@@ -793,14 +929,23 @@
        ragged band of dots that swell as they sit; 40px behind it the dots have
        merged into solid ink, so the label is speckled only at the fringe. */
     stipple: { frame: function (s) {
-      if (s.inside) s.fr = Math.min(s.fr + 2.2, 300); else s.fr = Math.max(0, s.fr - 11);
+      var dn = s.down || s.kdown;
+      if (s.inside || dn) s.fr = Math.min(s.fr + 2.2, 300); else s.fr = Math.max(0, s.fr - 11);
+      /* press: the soak runs backwards out of the press point. The core leaves
+         the entry point for the pressed point and shrinks to a disc, and the
+         dots around it come back off the page, so the ink is a fringe again. */
+      if (dn && !s.pinned) { s.pinned = 1; s.ppx = s.down ? s.lx : W / 2; s.ppy = s.down ? s.ly : H / 2; }
+      if (!dn) s.pinned = 0;
+      s.a.t = dn ? 1 : 0;
+      var p = clamp(step(s.a, .14, .62), 0, 1);
       for (var i = 0; i < s.dots.length; i++) {
         var d = s.dots[i], k = s.fr - d.soak;
-        setR(d, k <= 0 ? 0 : 0.9 + 1.6 * Math.min(k / 40, 1));
+        setR(d, k <= 0 ? 0 : (0.9 + 1.6 * Math.min(k / 40, 1)) * (1 - .44 * p));
       }
-      s.q('.ink').style.clipPath = 'circle(' + Math.max(0, s.fr - 44).toFixed(1) + 'px at ' + px(s.ex) + ' ' + px(s.ey) + ')';
+      var cr = Math.max(0, s.fr - 44) * (1 - p) + 56 * p;
+      s.q('.ink').style.clipPath = 'circle(' + cr.toFixed(1) + 'px at ' + px(s.ex + (s.ppx - s.ex) * p) + ' ' + px(s.ey + (s.ppy - s.ey) * p) + ')';
     }, init: function (s) {
-      var svg = s.q('svg'); s.dots = []; s.fr = 0;
+      var svg = s.q('svg'); s.dots = []; s.fr = 0; s.pinned = 0; s.ppx = W / 2; s.ppy = H / 2;
       for (var i = 0; i < 260; i++) {
         var d = dot(svg, 2 + rnd(i * 2) * (W - 8), 2 + rnd(i * 2 + 1) * (H - 8));
         d.j = 0.7 + 0.6 * rnd(600 + i); s.dots.push(d);
@@ -818,13 +963,21 @@
        the last, so the ramp between white and black is a dither, never a grey. */
     dither: { frame: function (s) {
       var e = s.entry, horiz = e === 'left' || e === 'right', w = W - 4, h = H - 4, span = horiz ? w : h;
-      s.a.t = s.inside ? span + RAMP : 0;
+      var dn = s.down || s.kdown;
+      s.a.t = s.inside || dn ? span + RAMP : 0;
+      s.b.t = dn ? 1 : 0;
       var f = step(s.a, .12, .74);
+      /* press: the top eight thresholds run their own ramp back out the way it
+         came, so the finished solid lifts to a half dither and the wipe is
+         legible again; a solid core under the label is held while they go */
+      var p = clamp(step(s.b, .14, .62), 0, 1), g = f - p * (span + RAMP);
       for (var k = 0; k < 16; k++) {
-        var L = Math.round(clamp(f - k * RAMP / 16, 0, span) / 2) * 2, r = s.lay[k];
+        var L = Math.round(clamp((k < 8 ? f : g) - k * RAMP / 16, 0, span) / 2) * 2, r = s.lay[k];
         if (horiz) { r.setAttribute('width', L); r.setAttribute('x', e === 'left' ? 0 : w - L); }
         else { r.setAttribute('height', L); r.setAttribute('y', e === 'top' ? 0 : h - L); }
       }
+      if (p > .005) { s.core.setAttribute('width', 106); s.core.setAttribute('height', 22); }
+      else { s.core.setAttribute('width', 0); s.core.setAttribute('height', 0); }
     }, init: function (s) {
       var svg = s.q('svg'), defs = mk(svg, 'defs'), id = 'bayer' + (++UID); s.lay = [];
       for (var k = 0; k < 16; k++) {
@@ -833,6 +986,7 @@
         mk(p, 'rect', { x: (i % 4) * 2, y: Math.floor(i / 4) * 2, width: 2, height: 2 });
         s.lay.push(mk(svg, 'rect', { x: 0, y: 0, width: 0, height: 0, fill: 'url(#' + id + '-' + k + ')' }));
       }
+      s.core = mk(svg, 'rect', { x: 27, y: 13, width: 0, height: 0 });
     }, enter: function (s) {
       var horiz = s.entry === 'left' || s.entry === 'right';
       s.a.v = 0; s.a.vel = 0;
@@ -853,10 +1007,13 @@
       s.hx = s.lxr; s.hy = s.lyr; s.ht = s.now;
       s.pvx += (rvx - s.pvx) * .3; s.pvy += (rvy - s.pvy) * .3;    /* px per frame */
       var px2 = s.lxr + s.pvx * 9.4, py2 = s.lyr + s.pvy * 9.4;    /* 150ms at 16ms per frame */
-      var hit = s.inside || (s.near > 0 && px2 >= 0 && px2 <= W && py2 >= 0 && py2 <= H);
+      var dn = s.down || s.kdown;
+      var hit = s.inside || dn || (s.near > 0 && px2 >= 0 && px2 <= W && py2 >= 0 && py2 <= H);
       if (hit && !s.pred) { s.pred = 1; s.pcx = clamp(px2, 0, W); s.pcy = clamp(py2, 0, H); }
       if (!hit) s.pred = 0;
-      s.a.t = hit ? 190 : 0;
+      /* press: the bloom shrinks back onto the point it was predicted at, so
+         the guess the hover acted on is what is left under the finger */
+      s.a.t = hit ? (dn ? 34 : 190) : 0;
       var r = step(s.a, .10, .72);
       s.q('.ink').style.clipPath = r < .05 ? 'circle(0px at 50% 50%)' : 'circle(' + r.toFixed(1) + 'px at ' + px(s.pcx) + ' ' + px(s.pcy) + ')';
     }, init: function (s) { s.pred = 0; s.pcx = W / 2; s.pcy = H / 2; s.hx = s.hy = 0; s.ht = -1e9; s.pvx = s.pvy = 0; } },
@@ -866,8 +1023,11 @@
        Once committed the fill grows from the centre. Invert, the first card,
        is the instant version of the same fill for comparison. */
     intent: { frame: function (s) {
-      var go = s.inside && s.now - s.enterT >= 80;
-      s.a.t = go ? 1 : 0;
+      var dn = s.down || s.kdown;
+      var go = (s.inside && s.now - s.enterT >= 80) || dn;
+      /* press: the fill runs back down its own growth to the frame the gate
+         let it start on, so the threshold the hover crossed is visible */
+      s.a.t = dn ? .55 : go ? 1 : 0;
       var v = clamp(step(s.a, .14, .60), 0, 1);
       s.q('.ink').style.clipPath = v > .98 ? 'none' : 'inset(' + px(24 * (1 - v)) + ' ' + px(80 * (1 - v)) + ')';   /* no mask at full: a mask edge on the border leaves a grey seam */
     }, init: function (s) { s.enterT = 1e12; }, enter: function (s) { s.enterT = performance.now(); } },
@@ -878,10 +1038,14 @@
     linger: { frame: function (s) {
       if (s.was && !s.inside) s.leftT = s.now;
       s.was = s.inside;
-      var hold = s.inside || s.now - s.leftT < 200;
+      var dn = s.down || s.kdown;
+      var hold = s.inside || dn || s.now - s.leftT < 200;
       s.a.t = hold ? 1 : 0;
-      var v = clamp(step(s.a, .12, .62), 0, 1);
-      s.q('.ink').style.clipPath = v > .98 ? 'none' : 'inset(' + px(24 * (1 - v)) + ' 0px)';
+      /* press: the same retraction runs on the other axis, parting the fill
+         around the label instead of across it, and stops at the grace width */
+      s.b.t = dn ? 30 : 0;
+      var v = clamp(step(s.a, .12, .62), 0, 1), hb = Math.max(0, step(s.b, .14, .62));
+      s.q('.ink').style.clipPath = v > .98 && hb < .05 ? 'none' : 'inset(' + px(24 * (1 - v)) + ' ' + px(hb) + ')';
     }, init: function (s) { s.was = false; s.leftT = -1e9; } },
 
     /* Approach angle: a straight edge sweeps across along the pointer's
@@ -896,7 +1060,10 @@
         s.hist.length = 0;                                                          /* the return trip starts a fresh history */
       }
       s.was = s.inside;
-      s.a.t = s.inside ? 0 : 260;
+      /* press: the plate backs off halfway along the same heading, so its
+         straight edge crosses the button and the angle it came in on shows */
+      var dn = s.down || s.kdown;
+      s.a.t = s.inside || dn ? (dn ? 160 : 0) : 260;
       var u = step(s.a, .14, .60);
       s.q('.ink').style.transform = !s.inside && u > 259.5 ? 'translate(-50%,-50%) rotate(0deg) translateX(260px)' :
         'translate(-50%,-50%) rotate(' + (s.th * 180 / Math.PI).toFixed(1) + 'deg) translateX(' + px(u) + ')';
@@ -1008,12 +1175,15 @@
     /* ---- 05-shape ---- */
     /* Speech tail: a point grows on the edge facing the pointer, from a
        distance, and slides round the perimeter to keep facing it. The tip
-       leans along the edge toward the pointer, the way a bubble's tail does. */
+       leans along the edge toward the pointer, the way a bubble's tail does.
+       Press and the tail keeps going: it reaches twice as far out and its
+       base narrows to a third, so the point becomes a spike. */
     tail: { reach: 100, frame: function (s) {
       aim(s.a, Math.atan2(s.dy, s.dx));
-      s.b.t = s.near * 12;
+      s.b.t = (s.down || s.kdown) ? 26 : s.near * 12;
       var th = step(s.a, .14, .74), h = Math.max(0, step(s.b, .16, .72));
-      var p = rim(th), k = sideOf(p), HW = 6, u = clamp(along(k, p[0], p[1]), HW + 1, SLEN[k] - HW - 1);
+      var HW = 6 - 4 * clamp((h - 12) / 14, 0, 1);
+      var p = rim(th), k = sideOf(p), u = clamp(along(k, p[0], p[1]), HW + 1, SLEN[k] - HW - 1);
       var t = along(k, s.lxr, s.lyr) - u;                                /* pointer offset along the edge */
       s.c.t = s.near ? clamp(t * .25, -HW, HW) : 0;
       var lean = step(s.c, .16, .72), ins = ['', '', '', ''];
@@ -1024,38 +1194,48 @@
     /* Notch: approach from outside and a semicircular bite opens in the
        border where the pointer is about to touch it, deepening as it nears
        and sliding along the edge with it. Cross the edge and the bite stays
-       where the pointer came through; leave and it closes. */
+       where the pointer came through; leave and it closes. Press and the
+       bite turns inside out through the flat edge into a bulge of the same
+       arc, half again as wide, on the same spot. */
     notch: { reach: 70, frame: function (s) {
-      var k = s.side, u = s.a.t, r = 0;
-      if (s.inside) { k = SIDE[s.entry]; u = along(k, s.ex, s.ey); r = 10; }
-      else if (s.near) { k = SIDE[s.oside]; u = along(k, s.lxr, s.lyr); r = 10 * Math.pow(s.near, 1.5); }
+      var k = s.side, u = s.a.t, r = 0, d = s.down || s.kdown;
+      if (s.inside) { k = SIDE[s.entry]; u = along(k, s.ex, s.ey); r = -10; }
+      else if (s.near) { k = SIDE[s.oside]; u = along(k, s.lxr, s.lyr); r = -10 * Math.pow(s.near, 1.5); }
       if (k !== s.side) { s.side = k; s.a.v = u; s.a.vel = 0; }         /* a new side: no flight across the box */
-      s.a.t = u; s.b.t = r;
-      var pos = step(s.a, .25, .65), rad = Math.max(0, step(s.b, .18, .70)), ins = ['', '', '', ''];
+      s.a.t = u; s.b.t = d ? 15 : r;                                    /* negative bites in, positive bulges out */
+      var pos = step(s.a, .25, .65), sig = step(s.b, .18, .70), rad = Math.abs(sig), ins = ['', '', '', ''];
       if (rad > .05) {
         var c = clamp(pos, rad + 1, SLEN[k] - rad - 1);
-        ins[k] = ' L' + pt(sidePt(k, c - rad, 0)) + ' A' + num(rad) + ' ' + num(rad) + ' 0 0 0 ' + pt(sidePt(k, c + rad, 0));
+        ins[k] = ' L' + pt(sidePt(k, c - rad, 0)) + ' A' + num(rad) + ' ' + num(rad) + ' 0 0 ' + (sig > 0 ? 1 : 0) + ' ' + pt(sidePt(k, c + rad, 0));
       }
       s.q('path').setAttribute('d', outline(ins));
-    }, init: function (s) { s.side = 0; } },
+    }, init: function (s) { s.side = 0; s.a.v = s.a.t = SLEN[0] / 2; } },
 
     /* Chamfer: the corner nearest the pointer is cut at 45 degrees, deeper
-       the closer the pointer comes to it, from outside or inside. */
+       the closer the pointer comes to it, from outside or inside. Press and
+       the cut spreads: all four corners take the same 16px chamfer. */
     chamfer: { reach: 60, frame: function (s) {
-      s.q('path').setAttribute('d', cutPath(cornerCut(s, 16), 0));
+      var d = s.down || s.kdown;
+      s.q('path').setAttribute('d', cutPath(d ? cornerHold(s, 16, 1) : cornerCut(s, 16), 0));
     } },
 
     /* Nearest corner rounds: the same corner, but it gains radius instead
-       of a cut, so one corner of the square button turns into a pill end. */
+       of a cut, so one corner of the square button turns into a pill end.
+       Press and it finishes the job: the radius runs out to half the height,
+       the largest a corner can take, so the end is a true half circle. */
     rounds: { reach: 60, frame: function (s) {
-      s.q('path').setAttribute('d', cutPath(cornerCut(s, 22), 1));
+      var d = s.down || s.kdown;
+      s.q('path').setAttribute('d', cutPath(d ? cornerHold(s, H / 2 - I, 0) : cornerCut(s, 22), 1));
     } },
 
     /* Parallelogram: the sides shear with pointer x, the top edge toward the
        pointer and the bottom away. Only the outline moves; the label stays
-       upright and the box under the pointer does not change. */
+       upright and the box under the pointer does not change. Press and the
+       lean reverses: the same shear on the same axis, the other sign, and
+       past the hover amount. A keyboard press leans right. */
     shear: { frame: function (s) {
-      s.a.t = s.inside ? s.nx * 12 : 0;
+      var d = s.down || s.kdown, n = s.inside ? s.nx : (d ? -1 : 0);
+      s.a.t = d ? clamp(-n * 20, -12, 12) : (s.inside ? s.nx * 12 : 0);
       var v = step(s.a, .16, .72);
       s.q('path').setAttribute('d', poly([[I + v, I], [W - I + v, I], [W - I - v, H - I], [I - v, H - I]]));
     } },
@@ -1066,20 +1246,23 @@
        rings out; the pointer pushes any mass within 36px, from inside or out,
        and the ring settles back to the exact rectangle in under a second. */
     jelly: { reach: 36, frame: function (s) {
-      var n = JN, x = s.x, i, j, ax, ay, d, f;
+      var n = JN, x = s.x, i, j, ax, ay, d, f, hd = s.down || s.kdown;
       for (i = 0; i < n; i++) {                            /* neighbour springs */
         j = (i + 1) % n;
         ax = x[2 * j].v - x[2 * i].v; ay = x[2 * j + 1].v - x[2 * i + 1].v;
         d = Math.sqrt(ax * ax + ay * ay) || 1; f = (d - s.jl[i]) * .10 / d;
         x[2 * i].vel += ax * f; x[2 * i + 1].vel += ay * f; x[2 * j].vel -= ax * f; x[2 * j + 1].vel -= ay * f;
       }
-      if (s.inside || s.near) for (i = 0; i < n; i++) {    /* the poke */
+      /* the poke, and under a press the same force with its sign turned
+         over: the ring is pulled onto the press point and held dented in */
+      if (s.inside || s.near || hd) for (i = 0; i < n; i++) {
         ax = x[2 * i].v - s.lxr; ay = x[2 * i + 1].v - s.lyr; d = Math.sqrt(ax * ax + ay * ay);
-        if (d < 36 && d > .01) { f = (36 - d) / 36 * 2.4 / d; x[2 * i].vel += ax * f; x[2 * i + 1].vel += ay * f; }
+        if (hd) { if (d < 44 && d > 7) { f = -(44 - d) / 44 * 1.5 / d; x[2 * i].vel += ax * f; x[2 * i + 1].vel += ay * f; } }
+        else if (d < 36 && d > .01) { f = (36 - d) / 36 * 2.4 / d; x[2 * i].vel += ax * f; x[2 * i + 1].vel += ay * f; }
       }
       var still = true;
       for (i = 0; i < 2 * n; i++) { step(x[i], .18, .74); if (!calm(x[i], .02)) still = false; }
-      if (still && !s.inside && !s.near) for (i = 0; i < 2 * n; i++) snap(x[i]);
+      if (still && !s.inside && !s.near && !hd) for (i = 0; i < 2 * n; i++) snap(x[i]);
       s.q('path').setAttribute('d', jellyPath(x));
     }, init: function (s) {
       var p = jellyRest(), i, j, ax, ay; s.jl = [];
@@ -1093,8 +1276,17 @@
     /* Pendulum: the button hangs from the middle of its top edge. Pointer
        motion across it is a push on the bob, so it swings in the direction of
        travel and gravity brings it back through a few damped swings. A resting
-       pointer applies no force, so it never swings away from one. */
+       pointer applies no force, so it never swings away from one. Press and
+       the bob is caught: the swing stops dead and the button is held over at
+       an angle set by where in the box the press landed. Let go and gravity
+       takes it back through the same damped swings. */
     pendulum: { frame: function (s) {
+      if (s.down || s.kdown) {                                          /* caught and held */
+        s.a.t = s.inside ? clamp(s.nx * 12, -12, 12) : 11; s.pp = s.lx;
+        var hh = step(s.a, .24, .58); s.a.t = 0;
+        s.el.style.transform = 'rotate(' + hh.toFixed(2) + 'deg)';
+        return;
+      }
       if (s.inside) s.a.vel = clamp(s.a.vel - (s.lx - s.pp) * .11, -2.6, 2.6);
       s.pp = s.lx; s.a.t = 0;
       var th = clamp(step(s.a, .09, .86), -14, 14); s.a.v = th;
@@ -1103,67 +1295,93 @@
 
     /* Rubber band: the label is elastic and pinned at the end away from the
        pointer; the near end stretches toward it, thinning a little as it goes.
-       Leave and it snaps back on a stiffer spring, overshooting once. */
+       Leave and it snaps back on a stiffer spring, overshooting once. Press
+       and the band is let go: it recoils through rest and compresses by as
+       much as it had stretched, pinned at the other end. */
     rubber: { frame: function (s) {
-      s.a.t = s.inside ? s.nx * .42 : 0;
-      var a = s.inside ? step(s.a, .22, .68) : step(s.a, .36, .58), lab = s.q('.label');
-      if (!s.inside && calm(s.a, .002)) { lab.style.transform = ''; lab.style.transformOrigin = ''; return; }
+      var d = s.down || s.kdown;
+      s.a.t = s.inside ? s.nx * .42 : (d ? .30 : 0);
+      s.b.t = d ? 1 : 0;
+      var a = (s.inside || d) ? step(s.a, .22, .68) : step(s.a, .36, .58), lab = s.q('.label');
+      var c = clamp(step(s.b, .20, .66), 0, 1), g = Math.abs(a) * (1 - 2 * c);
+      if (!s.inside && !d && calm(s.a, .002) && calm(s.b, .002)) { lab.style.transform = ''; lab.style.transformOrigin = ''; return; }
       lab.style.transformOrigin = a > 0 ? '0% 50%' : '100% 50%';
-      lab.style.transform = 'scale(' + (1 + Math.abs(a)).toFixed(3) + ',' + (1 - Math.abs(a) * .2).toFixed(3) + ')';
+      lab.style.transform = 'scale(' + (1 + g).toFixed(3) + ',' + (1 - g * .2).toFixed(3) + ')';
     } },
 
     /* Weight drop: on entry the label falls 4px under gravity, lands, bounces
        once and lies still on the lower position while the pointer stays. On
-       exit it is lifted back to rest on a plain spring, no bounce. */
+       exit it is lifted back to rest on a plain spring, no bounce. Press and
+       the same drop happens again from where it lies: the weight falls a
+       second 4px, bounces once more and lies still at 8px. */
     thud: { frame: function (s) {
-      var lab = s.q('.label');
-      if (s.inside) {
-        s.a.t = 4;
+      var lab = s.q('.label'), d = s.down || s.kdown, g = d ? 8 : 4;
+      if (s.inside || d) {
+        s.a.t = g;
         if (s.wb < 2) {
           s.a.vel += .22; s.a.v += s.a.vel;
-          if (s.a.v >= 4) { s.a.v = 4; s.wb++; s.a.vel = s.wb < 2 ? -s.a.vel * .6 : 0; }
-        } else { s.a.v = 4; s.a.vel = 0; }
+          if (s.a.v >= g) { s.a.v = g; s.wb++; s.a.vel = s.wb < 2 ? -s.a.vel * .6 : 0; }
+        } else if (s.a.v > g) { step(s.a, .18, .64); calm(s.a, .005); }   /* released: lifted back to the hover rest */
+        else { s.a.v = g; s.a.vel = 0; }
       } else { s.a.t = 0; step(s.a, .18, .64); calm(s.a, .005); }
       lab.style.transform = s.a.v === 0 ? '' : 'translateY(' + px(s.a.v) + ')';
-    }, init: function (s) { s.wb = 2; }, enter: function (s) { s.wb = 0; s.a.vel = 0; } },
+    }, init: function (s) { s.wb = 2; }, enter: function (s) { s.wb = 0; s.a.vel = 0; },
+      down: function (s) { s.wb = 0; s.a.vel = 0; }, keydown: function (s) { s.wb = 0; s.a.vel = 0; } },
 
     /* ---- 08-cursor ---- */
     /* Cursor becomes button: an 8px dot rides under the pointer over the stage.
        Cross into the button and the dot grows into a black plate that fills the
-       box; leave and the plate shrinks back to a dot under the pointer. */
+       box; leave and the plate shrinks back to a dot under the pointer.
+       Press and the growth runs backwards: the plate falls in to the dot it
+       came from, at the point pressed rather than under the pointer, and
+       grows back out of it on release. */
     become: { reach: 260, frame: function (s) {
-      var cur = s.q('.cur');
-      s.a.t = s.inside ? 1 : 0;
+      var cur = s.q('.cur'), d = s.down || s.kdown;
+      s.a.t = (s.inside && !d) ? 1 : 0;
       var t = clamp(step(s.a, .16, .72), 0, 1);
       if (!s.on && t <= 0) { cur.removeAttribute('style'); return; }
-      var x = s.lxr - 4, y = s.lyr - 4;
+      var x = (d ? s.qx : s.lxr) - 4, y = (d ? s.qy : s.lyr) - 4;
       cur.style.transform = 'translate(' + px(x * (1 - t)) + ',' + px(y * (1 - t)) + ')';
       cur.style.width = px(8 + (W - 12) * t); cur.style.height = px(8 + (H - 12) * t);
       cur.style.borderRadius = px(4 * (1 - t));
       cur.style.visibility = s.on ? 'visible' : 'hidden';
-    }, init: function (s) { stageWatch(s); } },
+    }, init: function (s) { s.qx = W / 2; s.qy = H / 2; stageWatch(s); },
+      down: function (s) { s.qx = s.lxr; s.qy = s.lyr; } },
 
     /* Sticky cursor: the dot trails the pointer on a loose spring. Once the
        pointer is inside the button the dot leaves it and snaps to the centre,
-       where it stays put until the pointer leaves the box. */
+       where it stays put until the pointer leaves the box. Press and it lets
+       go of the centre: the dot travels the rest of the way onto the press
+       point and shrinks to 4px there, the size of a real cursor tip. */
     sticky: { reach: 260, frame: function (s) {
-      var cur = s.q('.cur');
+      var cur = s.q('.cur'), h = s.down || s.kdown;
       if (!s.on) { cur.removeAttribute('style'); return; }
-      s.a.t = s.inside ? W / 2 : s.lxr; s.b.t = s.inside ? H / 2 : s.lyr;
-      var k = s.inside ? .28 : .10, d = s.inside ? .62 : .80;
-      curXY(cur, step(s.a, k, d) - 4, step(s.b, k, d) - 4);
+      s.a.t = h ? s.qx : s.inside ? W / 2 : s.lxr; s.b.t = h ? s.qy : s.inside ? H / 2 : s.lyr;
+      var k = (s.inside || h) ? .28 : .10, d = (s.inside || h) ? .62 : .80;
+      s.c.t = h ? 1 : 0;
+      var z = 8 - 4 * clamp(step(s.c, .22, .64), 0, 1);
+      if (z > 7.99) { cur.style.width = ''; cur.style.height = ''; }
+      else { cur.style.width = px(z); cur.style.height = px(z); }
+      curXY(cur, step(s.a, k, d) - z / 2, step(s.b, k, d) - z / 2);
     }, init: function (s) {
+      s.qx = W / 2; s.qy = H / 2;
       stageWatch(s, function (s) { s.a.v = s.a.t = s.lxr; s.b.v = s.b.t = s.lyr; s.a.vel = s.b.vel = 0; });
-    } },
+    }, down: function (s) { s.qx = s.lxr; s.qy = s.lyr; } },
 
     /* Inverting cursor: a white disc in difference blend rides under the
        pointer, so it reads black on the white stage. The button goes black
        while the pointer is inside, so the disc flips to white the instant its
-       centre crosses the border, half and half while it straddles the rule. */
+       centre crosses the border, half and half while it straddles the rule.
+       Press and the disc gives up its inversion from the middle outward
+       until only a rim of it is left: a white ring around a black hole. */
     lens: { reach: 260, frame: function (s) {
       var cur = s.q('.cur'), ink = s.q('.ink');
       if (s.inside) ink.style.visibility = 'visible'; else ink.removeAttribute('style');
       if (!s.on) { cur.removeAttribute('style'); return; }
+      s.a.t = (s.down || s.kdown) ? 8.5 : 0;                     /* the press empties the disc from the middle out */
+      var o = Math.max(0, step(s.a, .20, .66));
+      if (o < .05) { if (cur.style.background) cur.style.background = ''; }
+      else cur.style.background = 'radial-gradient(circle at 50% 50%, transparent ' + o.toFixed(2) + 'px, #fff ' + o.toFixed(2) + 'px)';
       curXY(cur, s.lxr - 12, s.lyr - 12);
     }, init: function (s) { stageWatch(s); } },
 
@@ -1173,7 +1391,9 @@
        filter property is cleared once it settles to zero, so the resting render
        never passes through the filter. */
     displace: { frame: function (s) {
-      s.a.t = s.inside ? Math.min(s.spd / 28, 1) * 16 : 0;
+      /* press: the same scale is written past anything speed asks for and held
+         there, so the warp the pointer was making settles at its limit */
+      s.a.t = s.down || s.kdown ? 22 : s.inside ? Math.min(s.spd / 28, 1) * 16 : 0;
       var v = Math.max(0, step(s.a, .22, .68)); if (v < .05) v = 0;
       s.dm.setAttribute('scale', filtNum(v));
       s.el.style.filter = v ? 'url(#f-displace)' : '';
@@ -1185,7 +1405,9 @@
        narrows the counters. The browser rounds the radius to whole device
        pixels, so the growth lands in one step; the cap is half a CSS pixel a side. */
     dilate: { reach: 120, frame: function (s) {
-      s.a.t = s.near * 0.5;
+      /* press: the same radius doubles to the next whole device pixel a side,
+         the only further step the browser's rounding allows */
+      s.a.t = s.down || s.kdown ? 1.0 : s.near * 0.5;
       var v = Math.max(0, step(s.a, .14, .74)); if (v < .02) v = 0;
       s.mo.setAttribute('radius', v ? filtNum(v) + ' 0' : '0');
       s.q('.label').style.filter = v ? 'url(#f-dilate)' : '';
@@ -1196,8 +1418,10 @@
        colours. Proximity lowers the cut, and the shadow surfaces from under
        the right and bottom edges, corners last. */
     thresh: { reach: 150, frame: function (s) {
-      s.a.t = s.near;
-      var v = clamp(step(s.a, .14, .74), 0, 1); if (v < .01) v = 0;
+      /* press: the cut drops past where proximity alone can take it, so more of
+         the same blur clears the threshold and the shadow surfaces further */
+      s.a.t = s.down || s.kdown ? 1.35 : s.near;
+      var v = clamp(step(s.a, .14, .74), 0, 1.35); if (v < .01) v = 0;
       s.fa.setAttribute('tableValues', filtCut(Math.round(64 - v * 40)));
       s.el.style.filter = v ? 'url(#f-thresh)' : '';
     }, init: function (s) { s.fa = s.q('feFuncA'); s.fa.setAttribute('tableValues', filtCut(64)); } },
@@ -1259,28 +1483,53 @@
     /* ---- 20-label ---- */
     /* Scramble settle: on entry every letter cycles through random capitals,
        a new glyph every 50ms, and settles on its own letter left to right in
-       about 600ms. Leaving restores the word at once. */
+       about 600ms. Leaving restores the word at once. Press and the settling
+       runs backwards: the letters come apart again from the right, one every
+       70ms, and stop on a fixed scramble that holds while the press holds. */
     scramble: { frame: function (s) {
       stamp(s);
+      var i, g, d = s.down || s.kdown;
+      if (d) {
+        for (i = 0; i < 6; i++) {
+          g = s.src[i];
+          if (s.held >= 60 + (5 - i) * 70) {
+            var j = Math.floor(rnd(s.psalt * 17 + i * 29) * POOL.length);
+            if (POOL.charAt(j) === s.src[i]) j = (j + 1) % POOL.length;
+            g = POOL.charAt(j);
+          }
+          if (s.letters[i].textContent !== g) s.letters[i].textContent = g;
+        }
+        return;
+      }
       if (!s.inside) { rest(s); return; }
       var t = s.now - s.t0, k = Math.floor(t / 50);
-      for (var i = 0; i < 6; i++) {
-        var g = t >= 150 + i * 90 ? s.src[i] : POOL.charAt(Math.floor(rnd(k * 7 + i * 13 + s.salt * 31) * POOL.length));
+      for (i = 0; i < 6; i++) {
+        g = t >= 150 + i * 90 ? s.src[i] : POOL.charAt(Math.floor(rnd(k * 7 + i * 13 + s.salt * 31) * POOL.length));
         if (s.letters[i].textContent !== g) s.letters[i].textContent = g;
       }
-    }, init: keepBox },
+    }, init: function (s) { keepBox(s); s.psalt = 1; },
+      down: function (s) { s.psalt++; }, keydown: function (s) { s.psalt++; },
+      up: function (s) { s.t0 = s.now; s.salt++; }, keyup: function (s) { s.t0 = s.now; s.salt++; } },
 
     /* Typewriter reveal: on entry the word is wiped and retyped from the
        side the pointer came in by, one letter every 85ms, a 2px caret on the
        letter about to appear. Letters are hidden by transparent colour so
-       the boxes hold; the caret is an inset shadow so no width is added. */
+       the boxes hold; the caret is an inset shadow so no width is added.
+       Press and the caret grows: the same 2px bar widens across the cell it
+       sits on until it fills it, and the letter reverses out of the block. */
     type: { frame: function (s) {
       stamp(s);
-      if (!s.inside) { rest(s); return; }
-      var n = Math.min(6, 1 + Math.floor((s.now - s.t0) / 85)), rtl = s.entry === 'right', ord = fromSide(s.entry);
+      var d = s.down || s.kdown;
+      if (!s.inside && !d) { rest(s); return; }
+      var n = s.inside ? Math.min(6, 1 + Math.floor((s.now - s.t0) / 85)) : 6;
+      var rtl = s.entry === 'right', ord = fromSide(s.entry);
+      var cw = (d && n >= 6) ? clamp(s.held / 160, 0, 1) : 0, hit = (d && n >= 6) ? 5 : -1;
       for (var o = 0; o < 6; o++) {
         var L = s.letters[ord[o]], c = o < n ? '' : 'transparent';
-        var b = o === n && n < 6 ? 'inset ' + (rtl ? '-2px' : '2px') + ' 0 0 #fff' : '';
+        var w = o === hit ? 2 + (((s.wu && s.wu[ord[o]]) || 20) - 2) * cw : 0;
+        var b = o === n && n < 6 ? 'inset ' + (rtl ? '-2px' : '2px') + ' 0 0 #fff'
+          : w > .05 ? 'inset ' + (rtl ? '-' : '') + w.toFixed(2) + 'px 0 0 #fff' : '';
+        if (o === hit && cw > .995) c = '#000';                  /* the block has covered the cell: reverse the letter out */
         if (L.style.color !== c) L.style.color = c;
         if (L.style.boxShadow !== b) L.style.boxShadow = b;
       }
@@ -1290,10 +1539,22 @@
        BUTTON; come in from the right half and it reads BOUTON, the letters
        that differ swapping one by one from the side of entry. A top or
        bottom entry counts as the half it crossed. On exit they swap back one
-       by one from the side of exit. */
+       by one from the side of exit. Press and the swap runs the other way
+       from whichever word is showing: the two letters that differ change
+       over again, so a press reads the word that the entry side did not. */
     swap: { frame: function (s) {
       stamp(s);
       var i, j, o, ord, t, L;
+      if (s.down || s.kdown) {
+        var alt = s.inside && halfOf(s, s.entry, s.ex) === 'right';    /* showing BOUTON already: press puts BUTTON back */
+        ord = fromSide(alt ? 'left' : 'right');
+        for (o = 0, j = 0; o < 6; o++) {
+          i = ord[o]; if (ALT.charAt(i) === s.src[i].toUpperCase()) continue;
+          L = s.letters[i]; var gp = s.held >= 60 + j * 110 ? (alt ? s.src[i] : ALT.charAt(i)) : (alt ? ALT.charAt(i) : s.src[i]); j++;
+          if (L.textContent !== gp) L.textContent = gp;
+        }
+        return;
+      }
       if (s.inside) {
         if (halfOf(s, s.entry, s.ex) !== 'right') { rest(s); return; }
         t = s.now - s.t0; ord = fromSide('right');
@@ -1319,14 +1580,27 @@
     case: { frame: function (s) {
       stamp(s);
       if (!s.cxs) { pack(s); return; }
+      var i, L, v, d = s.down || s.kdown;
+      if (d) {                                    /* the fall of case rolls back, and stops at the press point */
+        var px0 = clamp(s.qx, s.cxs[0] - 40, s.cxs[5] + 40);
+        for (i = 0; i < 6; i++) {
+          L = s.letters[i];
+          v = (s.cxs[i] <= px0 && px0 - s.cxs[i] <= s.held * 0.15) ? '' : L.style.textTransform;
+          if (L.style.textTransform !== v) L.style.textTransform = v;
+        }
+        pack(s);
+        return;
+      }
       var t = s.inside ? s.now - s.t0 : s.now - s.tx, x = clamp(s.inside ? s.ox : s.xx, s.cxs[0], s.cxs[5]);
-      for (var i = 0; i < 6; i++) {
-        var L = s.letters[i], hit = Math.abs(s.cxs[i] - x) <= t * 0.15;
-        var v = s.inside ? (hit ? 'none' : L.style.textTransform) : (hit ? '' : L.style.textTransform);
+      for (i = 0; i < 6; i++) {
+        L = s.letters[i];
+        var hit = Math.abs(s.cxs[i] - x) <= t * 0.15;
+        v = s.inside ? (hit ? 'none' : L.style.textTransform) : (hit ? '' : L.style.textTransform);
         if (L.style.textTransform !== v) L.style.textTransform = v;
       }
       pack(s);
-    }, init: function (s) { keepBox(s, 1); }, enter: centres },
+    }, init: function (s) { keepBox(s, 1); s.qx = W / 2; }, enter: centres,
+      down: function (s) { s.qx = s.lx; }, keydown: function (s) { s.qx = W / 2; } },
   };
 
   if (RM) { window.PFX = PFX; return; }

@@ -263,3 +263,167 @@
   .fx-peer-mark,.fx-anchor-tip{transition-duration:0s!important}
   .fx-quad .q:hover~.qfill{transform:none}
 }
+
+
+/* ---- Press states. Each is its own hover taken one step further, completed,
+   reversed part way, or flipped: never a second mechanism. Held while the
+   pointer is down (Space and Enter too); release returns to the hover state.
+   Written as :is(:active,.act) so the Press all switch can hold them. Each
+   rule states the whole pressed look, so a keyboard press with no hover
+   still lands on it. ---- */
+
+/* 01 Invert: the fill pulls in from the rule, leaving a white gap */
+.fx-invert:is(:active,.act){background:#000;box-shadow:inset 0 0 0 6px #fff}
+
+/* 02 Lines retract: the fill clears again; the side rules alone remain */
+.fx-lines:is(:active,.act){background:#fff;transition-delay:0s}
+.fx-lines:is(:active,.act)::before,.fx-lines:is(:active,.act)::after{transform:scaleX(0)}
+
+/* 03 Halo: closes the rest of the way, to a double rule two pixels out */
+.fx-halo:is(:active,.act)::after{inset:-6px;opacity:1}
+
+/* 04 Border revolve: the orbiting dash grows back into the whole rule */
+.fx-revolve:is(:active,.act){border-color:transparent}
+.fx-revolve:is(:active,.act) svg{stroke-dasharray:408 0;stroke-dashoffset:-408}
+
+/* 05 Dot to pill: the pill shrinks back to the dot it grew from */
+.fx-dot:is(:active,.act)::before{transform:none;width:32px;transition-delay:0s}
+
+/* 06 Curtain drop: the curtain lifts again, to half height */
+.fx-curtain:is(:active,.act)::after{transform:translateY(-50%)}
+
+/* 07 Scale: through rest size and below it */
+.fx-scale:is(:active,.act){transform:scale(.95)}
+
+/* 08 Tilt bounce: the same tilt, the other way */
+.fx-tilt:is(:active,.act){transform:scale(1.15) rotate(4deg)}
+
+/* 09 Lift: lands back flat */
+.fx-lift:is(:active,.act){transform:translateY(0)}
+
+/* 10 Crossed frames: the frames reach further past the edges */
+.fx-cross:is(:active,.act)::before{inset:-2px -30px;opacity:1}
+.fx-cross:is(:active,.act)::after{inset:-30px -2px;opacity:1}
+
+/* 11 Dash sweep: the two halves rejoin into one rule */
+.fx-dash:is(:active,.act){border-color:transparent}
+.fx-dash:is(:active,.act) svg{stroke-dasharray:408 0;stroke-dashoffset:-204}
+
+/* 12 Press in: sinks deeper under a deeper shadow */
+.fx-press:is(:active,.act){transform:translateY(5px) scale(.94);box-shadow:inset 0 5px 10px rgba(0,0,0,.35)}
+
+/* 13 Split sides: the top and bottom bars push further out */
+.fx-split:is(:active,.act){border-color:transparent}
+.fx-split:is(:active,.act)::before{inset:-12px -20px}
+.fx-split:is(:active,.act)::after{transform:scaleY(0)}
+
+/* 14 Sides close: the sides part again, leaving the label on white */
+.fx-sides:is(:active,.act){box-shadow:inset 40px 0 0 0 #000,inset -40px 0 0 0 #000}
+
+/* 15 Lift with shadow: lands on the shadow, which tightens under it */
+.fx-liftsh:is(:active,.act){transform:translateY(0);box-shadow:0 4px 4px -3px rgba(0,0,0,.55)}
+
+/* 16 Inset fill: the fill thins to a thick inner band */
+.fx-inset:is(:active,.act){box-shadow:inset 0 0 0 8px #000}
+
+/* 17 Hard shadow: the button jumps onto its slab */
+.fx-slab:is(:active,.act){transform:translate(8px,-8px);box-shadow:0 0 0 0 #000}
+
+/* 18 Split swipe: both halves pull back to a quarter each, from opposite sides */
+.fx-swipe:is(:active,.act)::before,.fx-swipe:is(:active,.act)::after{width:50%}
+
+/* 19 Corner blob: the disc retreats to a quarter in its corner */
+.fx-blob:is(:active,.act)::after{transform:scale(.3)}
+
+/* 20 Border draw: the rule undraws entirely and redraws on release */
+.fx-draw:is(:active,.act){border-color:#fff;transition-duration:0s}
+.fx-draw:is(:active,.act)::before,.fx-draw:is(:active,.act)::after{width:0;height:0;border-color:transparent;transition-delay:0s,0s,calc(.2s*var(--dur))}
+
+/* 21 Flip: carries on round to the front again */
+.fx-flip:is(:active,.act) .flip{transform:rotateY(360deg)}
+
+/* 22 Liquid fill: the level drops to halfway, crests showing */
+.fx-liquid:is(:active,.act) .wave i{transform:scale(1.7) translateY(50%)}
+
+/* 23 Gooey: the blobs pull back into the box, which stays black */
+.fx-goo:is(:active,.act){background:#000}
+.fx-goo:is(:active,.act)::before,.fx-goo:is(:active,.act)::after{transform:scale(0)}
+
+/* 24 Fill sideways: narrows to a bar behind the middle of the label */
+.fx-fillx:is(:active,.act)::after{transform:scaleX(.1)}
+
+/* 25 Fill vertical: narrows to a band behind the label */
+.fx-filly:is(:active,.act)::after{transform:scaleY(.5)}
+
+/* 26 Diagonal sweep: narrows to a diagonal band across the label */
+.fx-diag:is(:active,.act)::after{height:60px}
+
+/* 27 Skew wipe: pulls back to a slanted half */
+.fx-skew:is(:active,.act)::after{transform:translateX(-52%) skewX(-20deg)}
+
+/* 28 Frame out: the frame closes back onto the filled box */
+.fx-frameout:is(:active,.act){background:#000}
+.fx-frameout:is(:active,.act)::after{inset:-2px}
+
+/* 29 Radius morph: two opposite corners keep the radius, two lose it */
+.fx-radius:is(:active,.act){border-radius:24px 0}
+
+/* 30 Glow: flares wider */
+.fx-glow:is(:active,.act){box-shadow:0 0 28px 10px rgba(0,0,0,.5)}
+
+/* 31 Label slide: the word slides back the other way */
+.fx-slide:is(:active,.act) .l1{transform:none;opacity:1}
+.fx-slide:is(:active,.act) .l2{transform:translateX(-160%);opacity:0}
+
+/* 32 Wipe: the fill rebounds off the far edge to halfway */
+.fx-wipe:is(:active,.act)::after{transform:translateX(-50%)}
+
+/* 33 Perspective tilt: tilts further back */
+.fx-persp:is(:active,.act){transform:perspective(600px) rotateX(20deg) rotateY(-20deg)}
+
+/* 34 Corner marks: the marks tighten onto the corners, two pixels out */
+.fx-corners:is(:active,.act) .marks i{opacity:1;width:12px;height:12px}
+.fx-corners:is(:active,.act) .marks i:nth-child(1){top:-6px;left:-6px}
+.fx-corners:is(:active,.act) .marks i:nth-child(2){top:-6px;right:-6px}
+.fx-corners:is(:active,.act) .marks i:nth-child(3){bottom:-6px;left:-6px}
+.fx-corners:is(:active,.act) .marks i:nth-child(4){bottom:-6px;right:-6px}
+
+/* 35 Tracking: the letters close up tighter than rest */
+.fx-track:is(:active,.act) .label{letter-spacing:.02em}
+
+/* 36 Stepped fill: steps back to a half, in the same steps */
+.fx-steps:is(:active,.act)::after{transform:scale(.5)}
+
+/* Spring easing: the same spring, down below rest */
+.fx-curve:is(:active,.act){transform:scale(.92)}
+
+/* Conic sweep: the hand sweeps back to six o'clock */
+.fx-conic:is(:active,.act){--fx-conic-a:180deg}
+
+/* Sibling reacts: the plate spreads further, to a 16px surround */
+.fx-peer-mark:has(+ .fx-peer:is(:active,.act)){transform:scale(1.2,1.6667)}
+
+/* Display transition: the plate grows out to meet the rule */
+.fx-emerge:is(:active,.act)::after{display:block;transform:scale(1.0834,1.375)}
+@starting-style{.fx-emerge:is(:active,.act)::after{transform:scale(0)}}
+
+/* Anchored underline: the underline runs past both ends */
+@supports (anchor-name:--a){
+  .fx-anchor:is(:active,.act)+.fx-anchor-tip{transform:scaleX(1.15)}
+}
+
+/* Quadrant direction: the fill lets the quadrants through again while pressed,
+   so the one under the pointer names the edge the fill leaves by; on release
+   the same quadrant brings it back in from that edge. Hover state is only
+   recomputed after a layout change, so the 1px bottom offset (clipped, unseen)
+   is what makes the quadrant under a still pointer register at once. */
+.fx-quad:is(:active,.act) .qfill{pointer-events:none;bottom:-1px}
+.fx-quad:active .q:nth-of-type(1):hover~.qfill{animation-name:fx-quad-top-out}
+.fx-quad:active .q:nth-of-type(2):hover~.qfill{animation-name:fx-quad-right-out}
+.fx-quad:active .q:nth-of-type(3):hover~.qfill{animation-name:fx-quad-bottom-out}
+.fx-quad:active .q:nth-of-type(4):hover~.qfill{animation-name:fx-quad-left-out}
+.fx-quad.act .qfill{animation-name:fx-quad-top-out}
+@keyframes fx-quad-top-out{from{transform:none}to{transform:translateY(-101%)}}
+@keyframes fx-quad-right-out{from{transform:none}to{transform:translateX(101%)}}
+@keyframes fx-quad-bottom-out{from{transform:none}to{transform:translateY(101%)}}
+@keyframes fx-quad-left-out{from{transform:none}to{transform:translateX(-101%)}}
