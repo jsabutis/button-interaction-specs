@@ -1,6 +1,6 @@
 # Button hover specimens
 
-131 button hover mechanisms, one identical button. Same label, same 160 x 48 box, same 2px rule, black and white only. The only variable is what happens when the pointer arrives.
+131 button hover mechanisms, one identical button. Same label, same 160 x 48 box, same 2px rule, black and white only. The only variable is what happens when the pointer arrives, and, for 117 of them, what the same mechanism does when the pointer goes down.
 
 **[Live catalogue](https://jsabutis.github.io/button-interaction-specs/)**
 
@@ -15,6 +15,8 @@ A style catalogue, not a good-or-bad pattern set: nothing here is a recommendati
 131 specimens in fourteen sections, in page order. **Pure CSS** (36): the response is the same wherever the pointer enters and however fast it moves. **Pointer-reactive** (36): the response depends on pointer position, speed or entry edge, so a hover state cannot express it. **Variable font** (14): Inter's `wght` and `opsz` axes, and per-letter transforms, driven by the pointer. **Hatching and halftone** (4): fills built from line and dot density. **Intent and prediction** (4): where the pointer is going. **Press, hold and release** (5), **Keyboard and focus** (3), **Shape morph** (5), **Physics beyond springs** (4), **Cursor** (3), **New CSS, no JavaScript** (6), **SVG filters** (3), **After the press** (4, click states rather than hovers), **Label content** (4). Sections are the `SECTIONS` table in `build.py`; adding one is a list and a row.
 
 Verification harness: serve the folder, then a Playwright script per card records the rest state (inline styles, SVG attributes, computed box) before and after a synthetic hover, screenshots the held frame and the rest frame at 2x, and compares rest against the Invert card. Press, key, click and timing mechanisms need bespoke drives (`page.mouse.down`, `page.keyboard.press`), and a mid-state frame is captured by replacing `PFX[id].frame` with a no-op. Headless Chromium runs `requestAnimationFrame` near 120Hz, so frame-counted timings run twice as fast there as at 60Hz.
+
+Each card carries two tagged lines: what the hover does and what the press does. `Hover all` holds every CSS hover; `Press all` holds every CSS press on top of it. Neither reaches the JavaScript specimens, which need a real pointer.
 
 Each card has a `CSS` button; pointer-driven cards also have `JS`. The CSS view opens with the specimen's markup, since some need extra elements (an ink plate, an SVG border, the label split into letters); that markup is the only code here besides CSS and JavaScript.
 
@@ -33,6 +35,143 @@ Each card has a `CSS` button; pointer-driven cards also have `JS`. The CSS view 
 - 44 px minimum target: 48 px tall.
 - Hover state must settle: no infinite animation while the pointer rests.
 - The button must not leave the pointer: no sideways nudges.
+
+## Press states (117)
+
+Every specimen whose mechanism runs from hover also has a press: pointer down, held, on the same mechanism. The press is never a second effect. It relates to its hover in one of four ways, and the table names which.
+
+- **Continue**: the hover value goes further. Halo closes to a double rule; Crossed frames reach further out; Magnet lands under the pointer.
+- **Complete**: the hover left something part done and the press finishes it. Border revolve grows the dash back into the rule; Fill to pointer runs on to the far edge; Dock narrows onto one letter.
+- **Reverse part way**: the hover runs back, leaving a trace. Inset fill thins to an inner band; Ink bleed drains to a disc on its entry point; Dither lifts back to a half dither.
+- **Flip**: the same axis, the other sign. Tilt bounce tilts the other way; Lift lands flat; Lean leans back; Swell shrinks.
+
+Held while down, back to the hover on release, back to rest on leaving. Space and Enter press the same way: CSS presses are written as `:is(:active,.act)` with the whole pressed look in the rule, so a keyboard press with no hover still lands on it; JavaScript presses read `s.down || s.kdown`, and where the press needs a point they take the press point or, from the keyboard, the centre. Presses that are pure pointer displacement (Magnet, Label lag, Cast shadow) are a no-op from the keyboard by nature. The cursor specimens have nothing to press without a pointer over the stage.
+
+One specimen has no press: Proximity wake (51). Its whole mechanism is rule thickness, and a stroke-width change during a transition is a gate.
+
+Quadrant direction (120) needed one trick: while the fill covers the box the quadrants under it cannot be hovered, so the press turns the fill's `pointer-events` off and the quadrant under the pointer names the edge the fill leaves by. Browsers only recompute hover after a layout change, so the pressed fill also moves its bottom edge by one clipped pixel; without that the quadrant registers only once the pointer moves.
+
+| # | Name | Press | Relation |
+|---|---|---|---|
+| 01 | Invert | Fill pulls in from the rule | reverse part way |
+| 02 | Lines retract | Fill clears, sides stay | reverse part way |
+| 03 | Halo | Halo closes to a double rule | continue |
+| 04 | Border revolve | Dash grows back to full rule | complete |
+| 05 | Dot to pill | Pill shrinks back to the dot | reverse part way |
+| 06 | Curtain drop | Curtain lifts halfway | reverse part way |
+| 07 | Scale | Shrinks below its rest size | flip |
+| 08 | Tilt bounce | Tilts back the other way | flip |
+| 09 | Lift | Lands back flat | flip |
+| 10 | Crossed frames | Frames reach further out | continue |
+| 11 | Dash sweep | Halves rejoin into the rule | complete |
+| 12 | Press in | Sinks deeper still | continue |
+| 13 | Split sides | Bars push further out | continue |
+| 14 | Sides close | Sides part around the label | reverse part way |
+| 15 | Lift with shadow | Lands on its own shadow | flip |
+| 16 | Inset fill | Fill thins to an inner band | reverse part way |
+| 17 | Hard shadow | Button jumps onto its slab | complete |
+| 18 | Split swipe | Halves pull back to quarters | reverse part way |
+| 19 | Corner blob | Blob retreats to its corner | reverse part way |
+| 20 | Border draw | Rule undraws itself | reverse part way |
+| 21 | Flip | Flips on round to the front | continue |
+| 22 | Liquid fill | Level drops to halfway | reverse part way |
+| 23 | Gooey | Blobs pull back into the box | reverse part way |
+| 24 | Fill sideways | Fill narrows to a centre bar | reverse part way |
+| 25 | Fill vertical | Fill narrows to a mid band | reverse part way |
+| 26 | Diagonal sweep | Narrows to a diagonal band | reverse part way |
+| 27 | Skew wipe | Pulls back to a slanted half | reverse part way |
+| 28 | Frame out | Frame closes back on the box | reverse part way |
+| 29 | Radius morph | Rounds two opposite corners | flip |
+| 30 | Glow | Glow flares wider | continue |
+| 31 | Label slide | Slides back the other way | flip |
+| 32 | Wipe | Fill rebounds to halfway | reverse part way |
+| 33 | Perspective tilt | Tilts further back | continue |
+| 34 | Corner marks | Marks tighten on the corners | continue |
+| 35 | Tracking | Letters close up tight | flip |
+| 36 | Stepped fill | Fill steps back to a half | reverse part way |
+| 37 | Magnet | Snaps the rest of the way | continue |
+| 38 | Label magnet | Carries past the pointer | continue |
+| 39 | Ink bleed | Drains back to the entry | reverse part way |
+| 40 | Follow disc | Pins where you pressed | reverse part way |
+| 41 | Direction fill | Backs out the way it came | reverse part way |
+| 42 | Direction out | Starts leaving early | complete |
+| 43 | Pointer tilt | Leans near twice as far | continue |
+| 44 | Wobble tilt | Rocking is caught level | reverse part way |
+| 45 | Squash | Squashes the other way | flip |
+| 46 | Label lag | Catches up all the way | complete |
+| 47 | Edge bulge | Bows deeper and wider | continue |
+| 48 | Elastic frame | Every edge gathers in | continue |
+| 49 | Speed tracking | Packs the letters tight | flip |
+| 52 | Cast shadow | Shadow swings to your side | flip |
+| 53 | Label repel | Shies to the far edge | continue |
+| 54 | Lean | Leans back the other way | flip |
+| 55 | Sway | Holds the lean at full | complete |
+| 56 | Slinky | Holds the stretch open | complete |
+| 57 | Dimple | Collapses onto the press | continue |
+| 58 | Fill to pointer | Fill runs on to the end | complete |
+| 59 | Angle wipe | Wipes on out the far side | continue |
+| 60 | Momentum | Leaves as fast as it came | flip |
+| 61 | Pinhole | Hole shuts to a pinprick | reverse part way |
+| 62 | Reticle | Ring fills in solid | complete |
+| 63 | Crosshair | Arms run back to a tick | reverse part way |
+| 64 | Scanner bar | Bar covers what it scanned | complete |
+| 65 | Comet | Tail laid out and held | complete |
+| 66 | Dwell bloom | Bloom collapses to a disc | reverse part way |
+| 67 | Corner pull | All four corners reach it | continue |
+| 68 | Push in | Dent returns, deeper | continue |
+| 69 | Gap follows | Gap opens to two arcs | continue |
+| 70 | Bead | Bead swells to a stud | continue |
+| 71 | Swell | Swell runs the other way | flip |
+| 72 | Rise to meet | Sinks below the plane | flip |
+| 73 | Bolden | Runs on to the thin end | flip |
+| 74 | Tracking by x | Tracks wider than the edge | continue |
+| 75 | Weight by x | Commits to the nearer end | complete |
+| 76 | Weight keys | Key under it goes thin | reverse part way |
+| 77 | Dock | Narrows onto one letter | complete |
+| 78 | Keys press | The key bottoms out | continue |
+| 79 | Weight ripple | A thin wave runs back | reverse part way |
+| 80 | Optical size | Optical size falls back | reverse part way |
+| 81 | Face the pointer | Letters turn away from it | flip |
+| 82 | Part | Opens into two blocks | complete |
+| 83 | Weight by speed | Goes bold with no motion | complete |
+| 84 | Weight by dwell | Weight flips about base | flip |
+| 85 | Grass | The whole word goes over | continue |
+| 86 | Weight holds width | Lets the bold word widen | reverse part way |
+| 87 | Hatch fill | Breaks back into open lines | reverse part way |
+| 88 | Halftone bloom | Tightens on the press point | continue |
+| 89 | Stipple bleed | Soak runs back to the press | reverse part way |
+| 90 | Dither wipe | Lifts back to half dither | reverse part way |
+| 91 | Anticipation | Shrinks onto the guess | reverse part way |
+| 92 | Hover intent | Retracts to the gate frame | reverse part way |
+| 93 | Exit grace | Fill parts around the label | flip |
+| 94 | Approach angle | Backs off to show the angle | reverse part way |
+| 103 | Speech tail | Reaches out to a spike | continue |
+| 104 | Notch | Bite turns out to a bulge | flip |
+| 105 | Chamfer | All four corners cut | continue |
+| 106 | Nearest corner rounds | Rounds the whole corner off | complete |
+| 107 | Parallelogram | Shears back the other way | flip |
+| 108 | Jelly | Pulls in instead of out | flip |
+| 109 | Pendulum | Caught and held over | complete |
+| 110 | Rubber band | Recoils past rest | flip |
+| 111 | Weight drop | Drops the same fall again | continue |
+| 112 | Cursor becomes button | Plate falls back to the dot | reverse part way |
+| 113 | Sticky cursor | Lets go onto the press point | continue |
+| 114 | Inverting cursor | Disc empties to a ring | reverse part way |
+| 115 | Spring easing | Springs down below rest | flip |
+| 116 | Conic sweep | Sweeps back to six o'clock | reverse part way |
+| 117 | Sibling reacts | Plate spreads further behind | continue |
+| 118 | Display transition | Plate grows out to the rule | continue |
+| 119 | Anchored underline | Underline runs past the ends | continue |
+| 120 | Quadrant direction | Leaves by the quadrant held | flip |
+| 121 | Displacement by speed | Warp holds past top speed | continue |
+| 122 | Dilate weight | Stems take the next step | continue |
+| 123 | Threshold shadow | Cut drops, shadow surfaces | continue |
+| 128 | Scramble settle | Scrambles again and holds | reverse part way |
+| 129 | Typewriter reveal | Caret grows to a block | continue |
+| 130 | Word swap by direction | Swaps to the other word | flip |
+| 131 | Case morph | Caps return up to the press | reverse part way |
+
+Verified with a press drive per specimen (hover, down 1.2s, up, leave, then focus and Space): rest identical before and after, press differs from hover, release returns to the hover value within spring rounding. Speed, dwell, heading and pendulum presses were driven with a moving pointer; label presses were read as text. Screenshots of every held press were read against the hover frame.
 
 ## Kept (36)
 

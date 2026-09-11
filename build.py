@@ -162,6 +162,143 @@ L_20_LABEL = [('scramble', 'Scramble settle', 'Letters cycle then settle', ('new
 
 # @@LISTS@@ (new category lists are spliced in above this line)
 
+# ---- press states. One caption per specimen that has one (28 chars max). The
+# press is the specimen's own hover taken further, completed, reversed part way
+# or flipped; CSS in hover.css as :is(:active,.act), JS inside the PFX entry. ----
+PRESS = {
+    "invert":   "Fill pulls in from the rule",
+    "lines":    "Fill clears, sides stay",
+    "halo":     "Halo closes to a double rule",
+    "revolve":  "Dash grows back to full rule",
+    "dot":      "Pill shrinks back to the dot",
+    "curtain":  "Curtain lifts halfway",
+    "scale":    "Shrinks below its rest size",
+    "tilt":     "Tilts back the other way",
+    "lift":     "Lands back flat",
+    "cross":    "Frames reach further out",
+    "dash":     "Halves rejoin into the rule",
+    "press":    "Sinks deeper still",
+    "split":    "Bars push further out",
+    "sides":    "Sides part around the label",
+    "liftsh":   "Lands on its own shadow",
+    "inset":    "Fill thins to an inner band",
+    "slab":     "Button jumps onto its slab",
+    "swipe":    "Halves pull back to quarters",
+    "blob":     "Blob retreats to its corner",
+    "draw":     "Rule undraws itself",
+    "flip":     "Flips on round to the front",
+    "liquid":   "Level drops to halfway",
+    "goo":      "Blobs pull back into the box",
+    "fillx":    "Fill narrows to a centre bar",
+    "filly":    "Fill narrows to a mid band",
+    "diag":     "Narrows to a diagonal band",
+    "skew":     "Pulls back to a slanted half",
+    "frameout": "Frame closes back on the box",
+    "radius":   "Rounds two opposite corners",
+    "glow":     "Glow flares wider",
+    "slide":    "Slides back the other way",
+    "wipe":     "Fill rebounds to halfway",
+    "persp":    "Tilts further back",
+    "corners":  "Marks tighten on the corners",
+    "track":    "Letters close up tight",
+    "steps":    "Fill steps back to a half",
+    "curve":    "Springs down below rest",
+    "conic":    "Sweeps back to six o'clock",
+    "peer":     "Plate spreads further behind",
+    "emerge":   "Plate grows out to the rule",
+    "anchor":   "Underline runs past the ends",
+    "quad":     "Leaves by the quadrant held",
+    "magnet": "Snaps the rest of the way",
+    "maglabel": "Carries past the pointer",
+    "bleed": "Drains back to the entry",
+    "disc": "Pins where you pressed",
+    "dirfill": "Backs out the way it came",
+    "dirout": "Starts leaving early",
+    "ptilt": "Leans near twice as far",
+    "wobble": "Rocking is caught level",
+    "squash": "Squashes the other way",
+    "lag": "Catches up all the way",
+    "bulge": "Bows deeper and wider",
+    "cloth": "Every edge gathers in",
+    "speed": "Packs the letters tight",
+    "cast": "Shadow swings to your side",
+    "repel": "Shies to the far edge",
+    "lean": "Leans back the other way",
+    "sway": "Holds the lean at full",
+    "slinky": "Holds the stretch open",
+    "dimple": "Collapses onto the press",
+    "reach": "Fill runs on to the end",
+    "angle": "Wipes on out the far side",
+    "momentum": "Leaves as fast as it came",
+    "pinhole": "Hole shuts to a pinprick",
+    "reticle": "Ring fills in solid",
+    "xhair": "Arms run back to a tick",
+    "scan": "Bar covers what it scanned",
+    "comet": "Tail laid out and held",
+    "dwell": "Bloom collapses to a disc",
+    "cpull": "All four corners reach it",
+    "push": "Dent returns, deeper",
+    "gap": "Gap opens to two arcs",
+    "bead": "Bead swells to a stud",
+    "swell": "Swell runs the other way",
+    "rise": "Sinks below the plane",
+    "bolden": "Runs on to the thin end",
+    "xtrack": "Tracks wider than the edge",
+    "weightx": "Commits to the nearer end",
+    "wkeys": "Key under it goes thin",
+    "dock": "Narrows onto one letter",
+    "keys": "The key bottoms out",
+    "wripple": "A thin wave runs back",
+    "opsz": "Optical size falls back",
+    "face": "Letters turn away from it",
+    "part": "Opens into two blocks",
+    "wspeed": "Goes bold with no motion",
+    "wdwell": "Weight flips about base",
+    "grass": "The whole word goes over",
+    "holdw": "Lets the bold word widen",
+    "hatch": "Breaks back into open lines",
+    "halftone": "Tightens on the press point",
+    "stipple": "Soak runs back to the press",
+    "dither": "Lifts back to half dither",
+    "predict": "Shrinks onto the guess",
+    "intent": "Retracts to the gate frame",
+    "linger": "Fill parts around the label",
+    "heading": "Backs off to show the angle",
+    "displace": "Warp holds past top speed",
+    "dilate": "Stems take the next step",
+    "thresh": "Cut drops, shadow surfaces",
+    "tail": "Reaches out to a spike",
+    "notch": "Bite turns out to a bulge",
+    "chamfer": "All four corners cut",
+    "rounds": "Rounds the whole corner off",
+    "shear": "Shears back the other way",
+    "jelly": "Pulls in instead of out",
+    "pendulum": "Caught and held over",
+    "rubber": "Recoils past rest",
+    "thud": "Drops the same fall again",
+    "become": "Plate falls back to the dot",
+    "sticky": "Lets go onto the press point",
+    "lens": "Disc empties to a ring",
+    "scramble": "Scrambles again and holds",
+    "type": "Caret grows to a block",
+    "swap": "Swaps to the other word",
+    "case": "Caps return up to the press",
+    # @@PRESS@@ (JS press captions are spliced in above this line)
+}
+
+# what the description line describes: hover unless the specimen runs from something else
+TAGS = {"ripple": "press", "confirm": "press", "depth": "press", "dragoff": "press", "rebound": "press", "throw": "press",
+        "tabfill": "focus", "spacebar": "key", "fdwell": "focus",
+        "pending": "click", "check": "click", "shake": "click", "undo": "click"}
+
+def rows(fid, desc):
+    """the description row, tagged, plus the press row when the specimen has one"""
+    out = f'<div class="row"><span class="desc">{html.escape(desc)}</span><span class="tag">{TAGS.get(fid, "hover")}</span></div>'
+    if fid in PRESS:
+        assert len(PRESS[fid]) <= 28, (fid, len(PRESS[fid]))
+        out += f'\n    <div class="row"><span class="desc">{html.escape(PRESS[fid])}</span><span class="tag">press</span></div>'
+    return out
+
 # title, blurb, list, kind ("css" cards have one CSS button; "js" cards have CSS and JS)
 SECTIONS = [
     ("Pure CSS", "The response is the same wherever the pointer enters or how fast it moves.", EFFECTS, "css"),
@@ -209,7 +346,7 @@ def card(i, e):
   <div class="stage">{button(fid, kind)}</div>
   <figcaption>
     <div class="row"><span class="num">{i:02d}</span><b class="name">{html.escape(name)}</b><span class="src">{site} {links}</span></div>
-    <div class="row"><span class="desc">{html.escape(desc)}</span></div>
+    {rows(fid, desc)}
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for {html.escape(name)}">CSS</button></div>
   </figcaption>
 </figure>'''
@@ -260,7 +397,7 @@ def pcard(i, e):
   <div class="stage">{pbutton(fid, parts)}</div>
   <figcaption>
     <div class="row"><span class="num">{i:02d}</span><b class="name">{html.escape(name)}</b><span class="src">{src}</span></div>
-    <div class="row"><span class="desc">{html.escape(desc)}</span></div>
+    {rows(fid, desc)}
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for {html.escape(name)}">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for {html.escape(name)}">JS</button></div>
   </figcaption>
 </figure>'''
@@ -322,6 +459,7 @@ figcaption{{padding:0 16px 14px;display:flex;flex-direction:column;gap:2px}}
 .name{{font:600 14px/20px var(--sans);white-space:nowrap}}
 .src{{margin-left:auto;font:400 11px/20px var(--mono);white-space:nowrap}}
 .desc{{font:400 13px/20px var(--sans);white-space:nowrap;padding-left:32px}}
+.tag{{margin-left:auto;font:400 11px/20px var(--mono);letter-spacing:.04em;white-space:nowrap}}
 .codes{{justify-content:flex-end;gap:8px;margin-top:4px}}
 .css-btn{{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--ink);color:var(--ink);padding:4px 8px;cursor:pointer}}
 .css-btn:hover,.css-btn:focus-visible{{background:var(--ink);color:var(--paper);outline:none}}
@@ -352,9 +490,10 @@ dialog .dfoot{{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(
 
 <header>
   <h1>Button Hover Specimens</h1>
-  <span class="spec">{TOTAL} specimens, one base: Inter 600 14px, 160 x 48, 2px rule, black on white</span>
+  <span class="spec">{TOTAL} specimens, {len(PRESS)} press states, one base: Inter 600 14px, 160 x 48, 2px rule, black on white</span>
   <div class="controls">
     <label class="switch"><input type="checkbox" id="hoverAll"> Hover all</label>
+    <label class="switch"><input type="checkbox" id="pressAll"> Press all</label>
     <label class="switch"><input type="checkbox" id="slow"> Slow motion</label>
   </div>
 </header>
@@ -363,6 +502,7 @@ dialog .dfoot{{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(
 <footer>
   <p>Rules: <a href="https://balsamiq.com/blog/button-design-best-practices/">Balsamiq, Button design best practices</a>. Sources: <a href="{ARTICLE}">TestMu AI, CSS button hover effects</a>, pens by ocxigin; <a href="{MENUHOVER}">MenuHover, button hover styles</a>.</p>
   <p>Pointer-reactive specimens run one shared pointermove listener and a damped spring per value, so every effect settles instead of snapping, and <code>prefers-reduced-motion</code> disables the engine entirely.</p>
+  <p>Press states: {len(PRESS)} specimens also respond to the pointer going down. Each press is that specimen's own hover taken further, completed, reversed part way or flipped, held while down, back to the hover on release. Space and Enter press the same way.</p>
   <p>Rest state is identical for every specimen. Label stays legible on every frame via mix-blend-mode: difference. Greys occur only inside shadows.</p>
 </footer>
 
@@ -378,10 +518,13 @@ dialog .dfoot{{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(
 <script src="pointer.js"></script>
 <script>
 (function(){{
-  var all=document.querySelectorAll('main .fx');
-  document.getElementById('hoverAll').addEventListener('change',function(e){{
-    all.forEach(function(b){{b.classList.toggle('hov',e.target.checked)}});
-  }});
+  var all=document.querySelectorAll('main .fx'),hoverAll=document.getElementById('hoverAll'),pressAll=document.getElementById('pressAll');
+  function states(){{
+    var h=hoverAll.checked||pressAll.checked,p=pressAll.checked;
+    all.forEach(function(b){{b.classList.toggle('hov',h);b.classList.toggle('act',p)}});
+  }}
+  hoverAll.addEventListener('change',states);
+  pressAll.addEventListener('change',states);
   document.getElementById('slow').addEventListener('change',function(e){{
     document.documentElement.style.setProperty('--dur',e.target.checked?4:1);
   }});
@@ -417,7 +560,7 @@ dialog .dfoot{{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(
     }}
     var out='<!-- markup -->\\n'+markup(fig)+'\\n\\n/* base */\\n'+base.join('\\n')+'\\n\\n/* effect */\\n'+own.join('\\n');
     if(id==='goo')out+='\\n\\n/* add this filter once */\\n'+document.querySelector('#goo').parentNode.outerHTML.replace(/^\\s+/gm,'');
-    return out.replace(/:is\\(:hover, \\.hov\\)/g,':hover');
+    return out.replace(/:is\\(:hover, \\.hov\\)/g,':hover').replace(/:is\\(:active, \\.act\\)/g,':active');
   }}
   function jsFor(id){{
     var pf=window.PFX&&window.PFX[id];if(!pf)return '';

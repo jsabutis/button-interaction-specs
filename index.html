@@ -34,6 +34,7 @@ figcaption{padding:0 16px 14px;display:flex;flex-direction:column;gap:2px}
 .name{font:600 14px/20px var(--sans);white-space:nowrap}
 .src{margin-left:auto;font:400 11px/20px var(--mono);white-space:nowrap}
 .desc{font:400 13px/20px var(--sans);white-space:nowrap;padding-left:32px}
+.tag{margin-left:auto;font:400 11px/20px var(--mono);letter-spacing:.04em;white-space:nowrap}
 .codes{justify-content:flex-end;gap:8px;margin-top:4px}
 .css-btn{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--ink);color:var(--ink);padding:4px 8px;cursor:pointer}
 .css-btn:hover,.css-btn:focus-visible{background:var(--ink);color:var(--paper);outline:none}
@@ -64,9 +65,10 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
 
 <header>
   <h1>Button Hover Specimens</h1>
-  <span class="spec">131 specimens, one base: Inter 600 14px, 160 x 48, 2px rule, black on white</span>
+  <span class="spec">131 specimens, 117 press states, one base: Inter 600 14px, 160 x 48, 2px rule, black on white</span>
   <div class="controls">
     <label class="switch"><input type="checkbox" id="hoverAll"> Hover all</label>
+    <label class="switch"><input type="checkbox" id="pressAll"> Press all</label>
     <label class="switch"><input type="checkbox" id="slow"> Slow motion</label>
   </div>
 </header>
@@ -81,7 +83,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-invert"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">01</span><b class="name">Invert</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/ZEmvZxK" target="_blank" rel="noopener">4c</a>, <a href="https://codepen.io/ocxigin/pen/abQqxJW" target="_blank" rel="noopener">23</a></span></div>
-    <div class="row"><span class="desc">Fill snaps to black</span></div>
+    <div class="row"><span class="desc">Fill snaps to black</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill pulls in from the rule</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Invert">CSS</button></div>
   </figcaption>
 </figure>
@@ -89,7 +92,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-lines"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">02</span><b class="name">Lines retract</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/ZEmvZxK" target="_blank" rel="noopener">4a</a></span></div>
-    <div class="row"><span class="desc">Lines retract, then fill</span></div>
+    <div class="row"><span class="desc">Lines retract, then fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill clears, sides stay</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Lines retract">CSS</button></div>
   </figcaption>
 </figure>
@@ -97,7 +101,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-halo"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">03</span><b class="name">Halo</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/ExOoMWV" target="_blank" rel="noopener">2</a>, <a href="https://codepen.io/ocxigin/pen/KKrozLQ" target="_blank" rel="noopener">30a</a></span></div>
-    <div class="row"><span class="desc">Outer frame closes in</span></div>
+    <div class="row"><span class="desc">Outer frame closes in</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Halo closes to a double rule</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Halo">CSS</button></div>
   </figcaption>
 </figure>
@@ -105,7 +110,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-revolve"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><rect x="1" y="1" width="158" height="46"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">04</span><b class="name">Border revolve</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/gOQoyaZ" target="_blank" rel="noopener">3</a></span></div>
-    <div class="row"><span class="desc">Border orbits as a dash</span></div>
+    <div class="row"><span class="desc">Border orbits as a dash</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Dash grows back to full rule</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Border revolve">CSS</button></div>
   </figcaption>
 </figure>
@@ -113,7 +119,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dot"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">05</span><b class="name">Dot to pill</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/GRwyaWo" target="_blank" rel="noopener">5</a></span></div>
-    <div class="row"><span class="desc">A dot grows into a pill fill</span></div>
+    <div class="row"><span class="desc">A dot grows into a pill fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Pill shrinks back to the dot</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dot to pill">CSS</button></div>
   </figcaption>
 </figure>
@@ -121,7 +128,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-curtain clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">06</span><b class="name">Curtain drop</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/WNYdqOY" target="_blank" rel="noopener">7</a>, <a href="https://codepen.io/ocxigin/pen/abQqxJW" target="_blank" rel="noopener">23</a></span></div>
-    <div class="row"><span class="desc">Fill drops in from the top</span></div>
+    <div class="row"><span class="desc">Fill drops in from the top</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Curtain lifts halfway</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Curtain drop">CSS</button></div>
   </figcaption>
 </figure>
@@ -129,7 +137,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-scale"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">07</span><b class="name">Scale</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/zYMRoQQ" target="_blank" rel="noopener">11a</a></span></div>
-    <div class="row"><span class="desc">Grows ten percent in place</span></div>
+    <div class="row"><span class="desc">Grows ten percent in place</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Shrinks below its rest size</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Scale">CSS</button></div>
   </figcaption>
 </figure>
@@ -137,7 +146,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-tilt"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">08</span><b class="name">Tilt bounce</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/zYMRoQQ" target="_blank" rel="noopener">11b</a></span></div>
-    <div class="row"><span class="desc">Bounces into a slight tilt</span></div>
+    <div class="row"><span class="desc">Bounces into a slight tilt</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Tilts back the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Tilt bounce">CSS</button></div>
   </figcaption>
 </figure>
@@ -145,7 +155,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-lift"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">09</span><b class="name">Lift</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/zYMRoQQ" target="_blank" rel="noopener">11c</a></span></div>
-    <div class="row"><span class="desc">Rises eight pixels</span></div>
+    <div class="row"><span class="desc">Rises eight pixels</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Lands back flat</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Lift">CSS</button></div>
   </figcaption>
 </figure>
@@ -153,7 +164,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-cross"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">10</span><b class="name">Crossed frames</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/VwVQPWp" target="_blank" rel="noopener">12</a></span></div>
-    <div class="row"><span class="desc">Frames extend past the edges</span></div>
+    <div class="row"><span class="desc">Frames extend past the edges</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Frames reach further out</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Crossed frames">CSS</button></div>
   </figcaption>
 </figure>
@@ -161,7 +173,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dash"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><rect x="1" y="1" width="158" height="46"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">11</span><b class="name">Dash sweep</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/eYQVQpx" target="_blank" rel="noopener">19</a></span></div>
-    <div class="row"><span class="desc">Border splits, halves sweep</span></div>
+    <div class="row"><span class="desc">Border splits, halves sweep</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Halves rejoin into the rule</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dash sweep">CSS</button></div>
   </figcaption>
 </figure>
@@ -169,7 +182,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-press"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">12</span><b class="name">Press in</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/ExOQOEj" target="_blank" rel="noopener">20</a></span></div>
-    <div class="row"><span class="desc">Sinks with an inner shadow</span></div>
+    <div class="row"><span class="desc">Sinks with an inner shadow</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Sinks deeper still</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Press in">CSS</button></div>
   </figcaption>
 </figure>
@@ -177,7 +191,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-split"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">13</span><b class="name">Split sides</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/BaGYvyG" target="_blank" rel="noopener">21</a></span></div>
-    <div class="row"><span class="desc">Sides shrink, ends widen</span></div>
+    <div class="row"><span class="desc">Sides shrink, ends widen</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bars push further out</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Split sides">CSS</button></div>
   </figcaption>
 </figure>
@@ -185,7 +200,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-sides"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">14</span><b class="name">Sides close</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/poQLgBE" target="_blank" rel="noopener">27a</a></span></div>
-    <div class="row"><span class="desc">Sides slide in to the middle</span></div>
+    <div class="row"><span class="desc">Sides slide in to the middle</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Sides part around the label</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Sides close">CSS</button></div>
   </figcaption>
 </figure>
@@ -193,7 +209,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-liftsh"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">15</span><b class="name">Lift with shadow</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/poQLgBE" target="_blank" rel="noopener">27b</a></span></div>
-    <div class="row"><span class="desc">Rises over a soft shadow</span></div>
+    <div class="row"><span class="desc">Rises over a soft shadow</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Lands on its own shadow</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Lift with shadow">CSS</button></div>
   </figcaption>
 </figure>
@@ -201,7 +218,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-inset"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">16</span><b class="name">Inset fill</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/poQLgBE" target="_blank" rel="noopener">27c</a></span></div>
-    <div class="row"><span class="desc">All edges close in to fill</span></div>
+    <div class="row"><span class="desc">All edges close in to fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill thins to an inner band</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Inset fill">CSS</button></div>
   </figcaption>
 </figure>
@@ -209,7 +227,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-slab"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">17</span><b class="name">Hard shadow</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/zYMWqZj" target="_blank" rel="noopener">28</a></span></div>
-    <div class="row"><span class="desc">A solid slab appears behind</span></div>
+    <div class="row"><span class="desc">A solid slab appears behind</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Button jumps onto its slab</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Hard shadow">CSS</button></div>
   </figcaption>
 </figure>
@@ -217,7 +236,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-swipe clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">18</span><b class="name">Split swipe</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/VwVXaGZ" target="_blank" rel="noopener">29</a></span></div>
-    <div class="row"><span class="desc">Two half bars cross to fill</span></div>
+    <div class="row"><span class="desc">Two half bars cross to fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Halves pull back to quarters</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Split swipe">CSS</button></div>
   </figcaption>
 </figure>
@@ -225,7 +245,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-blob clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">19</span><b class="name">Corner blob</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/KKrozLQ" target="_blank" rel="noopener">30b</a></span></div>
-    <div class="row"><span class="desc">A disc grows from the corner</span></div>
+    <div class="row"><span class="desc">A disc grows from the corner</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Blob retreats to its corner</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Corner blob">CSS</button></div>
   </figcaption>
 </figure>
@@ -233,7 +254,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-draw"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">20</span><b class="name">Border draw</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/jOQzrWx" target="_blank" rel="noopener">31</a></span></div>
-    <div class="row"><span class="desc">Border redraws clockwise</span></div>
+    <div class="row"><span class="desc">Border redraws clockwise</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Rule undraws itself</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Border draw">CSS</button></div>
   </figcaption>
 </figure>
@@ -241,7 +263,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-flip"><span class="flip"><span class="face front">Button</span><span class="face back">Button</span></span></button></div>
   <figcaption>
     <div class="row"><span class="num">21</span><b class="name">Flip</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/eYQMzzx" target="_blank" rel="noopener">32</a></span></div>
-    <div class="row"><span class="desc">Flips to an inverted back</span></div>
+    <div class="row"><span class="desc">Flips to an inverted back</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Flips on round to the front</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Flip">CSS</button></div>
   </figcaption>
 </figure>
@@ -249,7 +272,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-liquid clip"><span class="label">Button</span><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">22</span><b class="name">Liquid fill</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/WNYzxZy" target="_blank" rel="noopener">33</a></span></div>
-    <div class="row"><span class="desc">Three waves rise and fill</span></div>
+    <div class="row"><span class="desc">Three waves rise and fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Level drops to halfway</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Liquid fill">CSS</button></div>
   </figcaption>
 </figure>
@@ -257,7 +281,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><span class="goo"><button type="button" class="fx fx-goo"><span class="label">Button</span></button></span></div>
   <figcaption>
     <div class="row"><span class="num">23</span><b class="name">Gooey</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/GRwxqdM" target="_blank" rel="noopener">34</a></span></div>
-    <div class="row"><span class="desc">Gooey blobs bulge outward</span></div>
+    <div class="row"><span class="desc">Gooey blobs bulge outward</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Blobs pull back into the box</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Gooey">CSS</button></div>
   </figcaption>
 </figure>
@@ -265,7 +290,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-fillx clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">24</span><b class="name">Fill sideways</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/LYXdZMb" target="_blank" rel="noopener">35</a>, <a href="https://codepen.io/ocxigin/pen/XWyEKwb" target="_blank" rel="noopener">36a</a></span></div>
-    <div class="row"><span class="desc">Fill spreads out sideways</span></div>
+    <div class="row"><span class="desc">Fill spreads out sideways</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill narrows to a centre bar</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Fill sideways">CSS</button></div>
   </figcaption>
 </figure>
@@ -273,7 +299,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-filly clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">25</span><b class="name">Fill vertical</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/XWyEKwb" target="_blank" rel="noopener">36b</a></span></div>
-    <div class="row"><span class="desc">Fill spreads up and down</span></div>
+    <div class="row"><span class="desc">Fill spreads up and down</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill narrows to a mid band</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Fill vertical">CSS</button></div>
   </figcaption>
 </figure>
@@ -281,7 +308,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-diag clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">26</span><b class="name">Diagonal sweep</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/XWyEKwb" target="_blank" rel="noopener">36c</a></span></div>
-    <div class="row"><span class="desc">Diagonal bar widens to fill</span></div>
+    <div class="row"><span class="desc">Diagonal bar widens to fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Narrows to a diagonal band</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Diagonal sweep">CSS</button></div>
   </figcaption>
 </figure>
@@ -289,7 +317,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-skew clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">27</span><b class="name">Skew wipe</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/XWyEKwb" target="_blank" rel="noopener">36d</a></span></div>
-    <div class="row"><span class="desc">A skewed bar wipes in</span></div>
+    <div class="row"><span class="desc">A skewed bar wipes in</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Pulls back to a slanted half</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Skew wipe">CSS</button></div>
   </figcaption>
 </figure>
@@ -297,7 +326,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-frameout"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">28</span><b class="name">Frame out</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/VwVXKLM" target="_blank" rel="noopener">38a</a></span></div>
-    <div class="row"><span class="desc">Fills, frame expands outward</span></div>
+    <div class="row"><span class="desc">Fills, frame expands outward</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Frame closes back on the box</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Frame out">CSS</button></div>
   </figcaption>
 </figure>
@@ -305,7 +335,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-radius"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">29</span><b class="name">Radius morph</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/VwVXKLM" target="_blank" rel="noopener">38c</a></span></div>
-    <div class="row"><span class="desc">Corners round into a pill</span></div>
+    <div class="row"><span class="desc">Corners round into a pill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Rounds two opposite corners</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Radius morph">CSS</button></div>
   </figcaption>
 </figure>
@@ -313,7 +344,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-glow"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">30</span><b class="name">Glow</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/zYMWKqB" target="_blank" rel="noopener">39</a>, <a href="https://codepen.io/ocxigin/pen/poQLgBE" target="_blank" rel="noopener">27d</a></span></div>
-    <div class="row"><span class="desc">A soft glow spreads around</span></div>
+    <div class="row"><span class="desc">A soft glow spreads around</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Glow flares wider</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Glow">CSS</button></div>
   </figcaption>
 </figure>
@@ -321,7 +353,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-slide clip"><span class="label l1">Button</span><span class="label l2">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">31</span><b class="name">Label slide</b><span class="src">article <a href="https://codepen.io/ocxigin/pen/eYQMdrB" target="_blank" rel="noopener">40</a></span></div>
-    <div class="row"><span class="desc">Label slides out and back in</span></div>
+    <div class="row"><span class="desc">Label slides out and back in</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Slides back the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Label slide">CSS</button></div>
   </figcaption>
 </figure>
@@ -329,7 +362,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wipe clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">32</span><b class="name">Wipe</b><span class="src">menuhover <a href="https://menuhover.com/button-hover-styles/" target="_blank" rel="noopener">2</a></span></div>
-    <div class="row"><span class="desc">Fill wipes left to right</span></div>
+    <div class="row"><span class="desc">Fill wipes left to right</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill rebounds to halfway</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Wipe">CSS</button></div>
   </figcaption>
 </figure>
@@ -337,7 +371,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-persp"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">33</span><b class="name">Perspective tilt</b><span class="src">menuhover <a href="https://menuhover.com/button-hover-styles/" target="_blank" rel="noopener">9</a></span></div>
-    <div class="row"><span class="desc">Tilts back in perspective</span></div>
+    <div class="row"><span class="desc">Tilts back in perspective</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Tilts further back</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Perspective tilt">CSS</button></div>
   </figcaption>
 </figure>
@@ -345,7 +380,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-corners"><span class="label">Button</span><span class="marks" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">34</span><b class="name">Corner marks</b><span class="src">menuhover <a href="https://menuhover.com/button-hover-styles/" target="_blank" rel="noopener">14</a></span></div>
-    <div class="row"><span class="desc">Marks appear at the corners</span></div>
+    <div class="row"><span class="desc">Marks appear at the corners</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Marks tighten on the corners</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Corner marks">CSS</button></div>
   </figcaption>
 </figure>
@@ -353,7 +389,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-track"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">35</span><b class="name">Tracking</b><span class="src">menuhover <a href="https://menuhover.com/button-hover-styles/" target="_blank" rel="noopener">15</a></span></div>
-    <div class="row"><span class="desc">Letters space out</span></div>
+    <div class="row"><span class="desc">Letters space out</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Letters close up tight</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Tracking">CSS</button></div>
   </figcaption>
 </figure>
@@ -361,7 +398,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-steps clip"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">36</span><b class="name">Stepped fill</b><span class="src">menuhover <a href="https://menuhover.com/button-hover-styles/" target="_blank" rel="noopener">18</a></span></div>
-    <div class="row"><span class="desc">Fill grows in eight steps</span></div>
+    <div class="row"><span class="desc">Fill grows in eight steps</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill steps back to a half</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Stepped fill">CSS</button></div>
   </figcaption>
 </figure>
@@ -377,7 +415,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-magnet" data-p="magnet"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">37</span><b class="name">Magnet</b><span class="src">prior art <a href="https://codepen.io/supah/pen/LYWKzEG" target="_blank" rel="noopener">gsap</a></span></div>
-    <div class="row"><span class="desc">Drifts toward the pointer</span></div>
+    <div class="row"><span class="desc">Drifts toward the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Snaps the rest of the way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Magnet">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Magnet">JS</button></div>
   </figcaption>
 </figure>
@@ -385,7 +424,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-maglabel" data-p="maglabel"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">38</span><b class="name">Label magnet</b><span class="src">prior art <a href="https://codepen.io/supah/pen/LYWKzEG" target="_blank" rel="noopener">gsap</a></span></div>
-    <div class="row"><span class="desc">Label drifts, frame stays</span></div>
+    <div class="row"><span class="desc">Label drifts, frame stays</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Carries past the pointer</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Label magnet">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Label magnet">JS</button></div>
   </figcaption>
 </figure>
@@ -393,7 +433,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-bleed" data-p="bleed"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">39</span><b class="name">Ink bleed</b><span class="src">prior art <a href="https://gsap.com/community/forums/topic/34990-filling-the-button-on-hover-from-the-side-of-the-entered-cursor-position/" target="_blank" rel="noopener">gsap</a></span></div>
-    <div class="row"><span class="desc">Fill grows from entry point</span></div>
+    <div class="row"><span class="desc">Fill grows from entry point</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Drains back to the entry</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Ink bleed">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Ink bleed">JS</button></div>
   </figcaption>
 </figure>
@@ -401,7 +442,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-disc clip" data-p="disc"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">40</span><b class="name">Follow disc</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">A disc follows the pointer</span></div>
+    <div class="row"><span class="desc">A disc follows the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Pins where you pressed</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Follow disc">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Follow disc">JS</button></div>
   </figcaption>
 </figure>
@@ -409,7 +451,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dirfill clip" data-p="dirfill"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">41</span><b class="name">Direction fill</b><span class="src">prior art <a href="https://css-tricks.com/direction-aware-hover-effects/" target="_blank" rel="noopener">css-tricks</a></span></div>
-    <div class="row"><span class="desc">Fill enters from that edge</span></div>
+    <div class="row"><span class="desc">Fill enters from that edge</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Backs out the way it came</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Direction fill">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Direction fill">JS</button></div>
   </figcaption>
 </figure>
@@ -417,7 +460,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dirout clip" data-p="dirout"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">42</span><b class="name">Direction out</b><span class="src">prior art <a href="https://css-tricks.com/direction-aware-hover-effects/" target="_blank" rel="noopener">css-tricks</a></span></div>
-    <div class="row"><span class="desc">Fill leaves by the exit edge</span></div>
+    <div class="row"><span class="desc">Fill leaves by the exit edge</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Starts leaving early</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Direction out">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Direction out">JS</button></div>
   </figcaption>
 </figure>
@@ -425,7 +469,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-ptilt" data-p="ptilt"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">43</span><b class="name">Pointer tilt</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Tilts to track the pointer</span></div>
+    <div class="row"><span class="desc">Tilts to track the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Leans near twice as far</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Pointer tilt">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Pointer tilt">JS</button></div>
   </figcaption>
 </figure>
@@ -433,7 +478,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wobble" data-p="wobble"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">44</span><b class="name">Wobble tilt</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Tilt overshoots and settles</span></div>
+    <div class="row"><span class="desc">Tilt overshoots and settles</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Rocking is caught level</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Wobble tilt">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Wobble tilt">JS</button></div>
   </figcaption>
 </figure>
@@ -441,7 +487,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-squash" data-p="squash"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">45</span><b class="name">Squash</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Stretches along the travel</span></div>
+    <div class="row"><span class="desc">Stretches along the travel</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Squashes the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Squash">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Squash">JS</button></div>
   </figcaption>
 </figure>
@@ -449,7 +496,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-lag" data-p="lag"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">46</span><b class="name">Label lag</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Label trails the pointer</span></div>
+    <div class="row"><span class="desc">Label trails the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Catches up all the way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Label lag">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Label lag">JS</button></div>
   </figcaption>
 </figure>
@@ -457,7 +505,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-bulge" data-p="bulge"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">47</span><b class="name">Edge bulge</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Nearest edge bows outward</span></div>
+    <div class="row"><span class="desc">Nearest edge bows outward</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bows deeper and wider</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Edge bulge">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Edge bulge">JS</button></div>
   </figcaption>
 </figure>
@@ -465,7 +514,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-cloth" data-p="cloth"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">48</span><b class="name">Elastic frame</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">All four edges lean to it</span></div>
+    <div class="row"><span class="desc">All four edges lean to it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Every edge gathers in</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Elastic frame">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Elastic frame">JS</button></div>
   </figcaption>
 </figure>
@@ -473,7 +523,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-speed" data-p="speed"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">49</span><b class="name">Speed tracking</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Tracking opens with speed</span></div>
+    <div class="row"><span class="desc">Tracking opens with speed</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Packs the letters tight</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Speed tracking">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Speed tracking">JS</button></div>
   </figcaption>
 </figure>
@@ -481,7 +532,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-ripple clip" data-p="ripple"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">50</span><b class="name">Press ripple</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Ring from the press point</span></div>
+    <div class="row"><span class="desc">Ring from the press point</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Press ripple">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Press ripple">JS</button></div>
   </figcaption>
 </figure>
@@ -489,7 +540,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-awake" data-p="awake"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">51</span><b class="name">Proximity wake</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Rule thickens as you near</span></div>
+    <div class="row"><span class="desc">Rule thickens as you near</span><span class="tag">hover</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Proximity wake">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Proximity wake">JS</button></div>
   </figcaption>
 </figure>
@@ -497,7 +548,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-cast" data-p="cast"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">52</span><b class="name">Cast shadow</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Shadow falls away from it</span></div>
+    <div class="row"><span class="desc">Shadow falls away from it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Shadow swings to your side</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Cast shadow">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Cast shadow">JS</button></div>
   </figcaption>
 </figure>
@@ -505,7 +557,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-repel" data-p="repel"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">53</span><b class="name">Label repel</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Label shies away from it</span></div>
+    <div class="row"><span class="desc">Label shies away from it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Shies to the far edge</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Label repel">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Label repel">JS</button></div>
   </figcaption>
 </figure>
@@ -513,7 +566,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-lean" data-p="lean"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">54</span><b class="name">Lean</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Skews toward the pointer</span></div>
+    <div class="row"><span class="desc">Skews toward the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Leans back the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Lean">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Lean">JS</button></div>
   </figcaption>
 </figure>
@@ -521,7 +575,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-sway" data-p="sway"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">55</span><b class="name">Sway</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Leans against the travel</span></div>
+    <div class="row"><span class="desc">Leans against the travel</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Holds the lean at full</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Sway">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Sway">JS</button></div>
   </figcaption>
 </figure>
@@ -529,7 +584,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-slinky" data-p="slinky"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">56</span><b class="name">Slinky</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letters trail one by one</span></div>
+    <div class="row"><span class="desc">Letters trail one by one</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Holds the stretch open</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Slinky">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Slinky">JS</button></div>
   </figcaption>
 </figure>
@@ -537,7 +593,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dimple" data-p="dimple"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">57</span><b class="name">Dimple</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Shrinks toward the pointer</span></div>
+    <div class="row"><span class="desc">Shrinks toward the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Collapses onto the press</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dimple">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Dimple">JS</button></div>
   </figcaption>
 </figure>
@@ -545,7 +602,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-reach" data-p="reach"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">58</span><b class="name">Fill to pointer</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill reaches the pointer</span></div>
+    <div class="row"><span class="desc">Fill reaches the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill runs on to the end</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Fill to pointer">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Fill to pointer">JS</button></div>
   </figcaption>
 </figure>
@@ -553,7 +611,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-angle clip" data-p="angle"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">59</span><b class="name">Angle wipe</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Wipes along the entry angle</span></div>
+    <div class="row"><span class="desc">Wipes along the entry angle</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Wipes on out the far side</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Angle wipe">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Angle wipe">JS</button></div>
   </figcaption>
 </figure>
@@ -561,7 +620,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-momentum clip" data-p="momentum"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">60</span><b class="name">Momentum</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fills as fast as you enter</span></div>
+    <div class="row"><span class="desc">Fills as fast as you enter</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Leaves as fast as it came</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Momentum">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Momentum">JS</button></div>
   </figcaption>
 </figure>
@@ -569,7 +629,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-pinhole clip" data-p="pinhole"><span class="label">Button</span><span class="ink" aria-hidden="true"></span><span class="hole" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">61</span><b class="name">Pinhole</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Black, with a hole at it</span></div>
+    <div class="row"><span class="desc">Black, with a hole at it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Hole shuts to a pinprick</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Pinhole">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Pinhole">JS</button></div>
   </figcaption>
 </figure>
@@ -577,7 +638,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-reticle clip" data-p="reticle"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">62</span><b class="name">Reticle</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">A ring circles the pointer</span></div>
+    <div class="row"><span class="desc">A ring circles the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Ring fills in solid</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Reticle">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Reticle">JS</button></div>
   </figcaption>
 </figure>
@@ -585,7 +647,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-xhair clip" data-p="xhair"><span class="label">Button</span><span class="hx" aria-hidden="true"></span><span class="vy" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">63</span><b class="name">Crosshair</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Lines cross at the pointer</span></div>
+    <div class="row"><span class="desc">Lines cross at the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Arms run back to a tick</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Crosshair">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Crosshair">JS</button></div>
   </figcaption>
 </figure>
@@ -593,7 +656,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-scan clip" data-p="scan"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">64</span><b class="name">Scanner bar</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">A bar tracks the pointer x</span></div>
+    <div class="row"><span class="desc">A bar tracks the pointer x</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bar covers what it scanned</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Scanner bar">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Scanner bar">JS</button></div>
   </figcaption>
 </figure>
@@ -601,7 +665,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-comet clip" data-p="comet"><span class="label">Button</span><span class="dot d1" aria-hidden="true"></span><span class="dot d2" aria-hidden="true"></span><span class="dot d3" aria-hidden="true"></span><span class="dot d4" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">65</span><b class="name">Comet</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Disc trails a tail behind</span></div>
+    <div class="row"><span class="desc">Disc trails a tail behind</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Tail laid out and held</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Comet">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Comet">JS</button></div>
   </figcaption>
 </figure>
@@ -609,7 +674,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dwell" data-p="dwell"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">66</span><b class="name">Dwell bloom</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Grows the longer you rest</span></div>
+    <div class="row"><span class="desc">Grows the longer you rest</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bloom collapses to a disc</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dwell bloom">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Dwell bloom">JS</button></div>
   </figcaption>
 </figure>
@@ -617,7 +683,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-cpull" data-p="cpull"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">67</span><b class="name">Corner pull</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Nearest corner reaches it</span></div>
+    <div class="row"><span class="desc">Nearest corner reaches it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">All four corners reach it</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Corner pull">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Corner pull">JS</button></div>
   </figcaption>
 </figure>
@@ -625,7 +692,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-push" data-p="push"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">68</span><b class="name">Push in</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Edge dents as you approach</span></div>
+    <div class="row"><span class="desc">Edge dents as you approach</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Dent returns, deeper</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Push in">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Push in">JS</button></div>
   </figcaption>
 </figure>
@@ -633,7 +701,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-gap" data-p="gap"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><rect x="1" y="1" width="158" height="46"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">69</span><b class="name">Gap follows</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Border gap faces the pointer</span></div>
+    <div class="row"><span class="desc">Border gap faces the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Gap opens to two arcs</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Gap follows">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Gap follows">JS</button></div>
   </figcaption>
 </figure>
@@ -641,7 +710,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-bead" data-p="bead"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><rect x="1" y="1" width="158" height="46"/><circle cx="80" cy="1" r="0"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">70</span><b class="name">Bead</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bead slides toward it</span></div>
+    <div class="row"><span class="desc">Bead slides toward it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bead swells to a stud</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Bead">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Bead">JS</button></div>
   </figcaption>
 </figure>
@@ -649,7 +719,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-swell" data-p="swell"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">71</span><b class="name">Swell</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Grows as you approach</span></div>
+    <div class="row"><span class="desc">Grows as you approach</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Swell runs the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Swell">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Swell">JS</button></div>
   </figcaption>
 </figure>
@@ -657,7 +728,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-rise" data-p="rise"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">72</span><b class="name">Rise to meet</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Lifts to meet you, lands</span></div>
+    <div class="row"><span class="desc">Lifts to meet you, lands</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Sinks below the plane</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Rise to meet">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Rise to meet">JS</button></div>
   </figcaption>
 </figure>
@@ -673,7 +745,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-bolden" data-p="bolden"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">73</span><b class="name">Bolden</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Weight rises as you near</span></div>
+    <div class="row"><span class="desc">Weight rises as you near</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Runs on to the thin end</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Bolden">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Bolden">JS</button></div>
   </figcaption>
 </figure>
@@ -681,7 +754,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-xtrack" data-p="xtrack"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">74</span><b class="name">Tracking by x</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Spacing opens left to right</span></div>
+    <div class="row"><span class="desc">Spacing opens left to right</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Tracks wider than the edge</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Tracking by x">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Tracking by x">JS</button></div>
   </figcaption>
 </figure>
@@ -689,7 +763,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-weightx" data-p="weightx"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">75</span><b class="name">Weight by x</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Thin at left, bold at right</span></div>
+    <div class="row"><span class="desc">Thin at left, bold at right</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Commits to the nearer end</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight by x">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight by x">JS</button></div>
   </figcaption>
 </figure>
@@ -697,7 +772,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wkeys" data-p="wkeys"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">76</span><b class="name">Weight keys</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letter under it goes bold</span></div>
+    <div class="row"><span class="desc">Letter under it goes bold</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Key under it goes thin</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight keys">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight keys">JS</button></div>
   </figcaption>
 </figure>
@@ -705,7 +781,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dock" data-p="dock"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">77</span><b class="name">Dock</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letter under it grows</span></div>
+    <div class="row"><span class="desc">Letter under it grows</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Narrows onto one letter</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dock">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Dock">JS</button></div>
   </figcaption>
 </figure>
@@ -713,7 +790,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-keys" data-p="keys"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">78</span><b class="name">Keys press</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letter under it sinks</span></div>
+    <div class="row"><span class="desc">Letter under it sinks</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">The key bottoms out</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Keys press">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Keys press">JS</button></div>
   </figcaption>
 </figure>
@@ -721,7 +799,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wripple" data-p="wripple"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">79</span><b class="name">Weight ripple</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bold travels through word</span></div>
+    <div class="row"><span class="desc">Bold travels through word</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">A thin wave runs back</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight ripple">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight ripple">JS</button></div>
   </figcaption>
 </figure>
@@ -729,7 +808,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-opsz" data-p="opsz"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">80</span><b class="name">Optical size</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Optical size by distance</span></div>
+    <div class="row"><span class="desc">Optical size by distance</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Optical size falls back</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Optical size">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Optical size">JS</button></div>
   </figcaption>
 </figure>
@@ -737,7 +817,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-face" data-p="face"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">81</span><b class="name">Face the pointer</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letters turn to face it</span></div>
+    <div class="row"><span class="desc">Letters turn to face it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Letters turn away from it</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Face the pointer">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Face the pointer">JS</button></div>
   </figcaption>
 </figure>
@@ -745,7 +826,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-part" data-p="part"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">82</span><b class="name">Part</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letters part around it</span></div>
+    <div class="row"><span class="desc">Letters part around it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Opens into two blocks</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Part">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Part">JS</button></div>
   </figcaption>
 </figure>
@@ -753,7 +835,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wspeed" data-p="wspeed"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">83</span><b class="name">Weight by speed</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bolder the faster you move</span></div>
+    <div class="row"><span class="desc">Bolder the faster you move</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Goes bold with no motion</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight by speed">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight by speed">JS</button></div>
   </figcaption>
 </figure>
@@ -761,7 +844,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-wdwell" data-p="wdwell"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">84</span><b class="name">Weight by dwell</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bolder the longer you rest</span></div>
+    <div class="row"><span class="desc">Bolder the longer you rest</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Weight flips about base</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight by dwell">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight by dwell">JS</button></div>
   </figcaption>
 </figure>
@@ -769,7 +853,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-grass" data-p="grass"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">85</span><b class="name">Grass</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letters lean away from it</span></div>
+    <div class="row"><span class="desc">Letters lean away from it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">The whole word goes over</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Grass">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Grass">JS</button></div>
   </figcaption>
 </figure>
@@ -777,7 +862,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-holdw" data-p="holdw"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">86</span><b class="name">Weight holds width</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bolder, width held fixed</span></div>
+    <div class="row"><span class="desc">Bolder, width held fixed</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Lets the bold word widen</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight holds width">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight holds width">JS</button></div>
   </figcaption>
 </figure>
@@ -793,7 +879,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-hatch" data-p="hatch"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">87</span><b class="name">Hatch fill</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Lines close up as you near</span></div>
+    <div class="row"><span class="desc">Lines close up as you near</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Breaks back into open lines</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Hatch fill">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Hatch fill">JS</button></div>
   </figcaption>
 </figure>
@@ -801,7 +888,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-halftone" data-p="halftone"><span class="label">Button</span><svg aria-hidden="true" data-gen="1"></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">88</span><b class="name">Halftone bloom</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Dots swell under the pointer</span></div>
+    <div class="row"><span class="desc">Dots swell under the pointer</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Tightens on the press point</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Halftone bloom">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Halftone bloom">JS</button></div>
   </figcaption>
 </figure>
@@ -809,7 +897,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-stipple" data-p="stipple"><span class="label">Button</span><span class="ink" aria-hidden="true"></span><svg aria-hidden="true" data-gen="1"></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">89</span><b class="name">Stipple bleed</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Dots soak in from the entry</span></div>
+    <div class="row"><span class="desc">Dots soak in from the entry</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Soak runs back to the press</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Stipple bleed">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Stipple bleed">JS</button></div>
   </figcaption>
 </figure>
@@ -817,7 +906,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dither" data-p="dither"><span class="label">Button</span><svg aria-hidden="true" data-gen="1"></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">90</span><b class="name">Dither wipe</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Ordered dither from the edge</span></div>
+    <div class="row"><span class="desc">Ordered dither from the edge</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Lifts back to half dither</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dither wipe">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Dither wipe">JS</button></div>
   </figcaption>
 </figure>
@@ -833,7 +923,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-predict" data-p="predict"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">91</span><b class="name">Anticipation</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill starts before arrival</span></div>
+    <div class="row"><span class="desc">Fill starts before arrival</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Shrinks onto the guess</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Anticipation">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Anticipation">JS</button></div>
   </figcaption>
 </figure>
@@ -841,7 +932,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-intent" data-p="intent"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">92</span><b class="name">Hover intent</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fills only after 80ms inside</span></div>
+    <div class="row"><span class="desc">Fills only after 80ms inside</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Retracts to the gate frame</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Hover intent">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Hover intent">JS</button></div>
   </figcaption>
 </figure>
@@ -849,7 +941,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-linger" data-p="linger"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">93</span><b class="name">Exit grace</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill holds 200ms after exit</span></div>
+    <div class="row"><span class="desc">Fill holds 200ms after exit</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Fill parts around the label</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Exit grace">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Exit grace">JS</button></div>
   </figcaption>
 </figure>
@@ -857,7 +950,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-heading clip" data-p="heading"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">94</span><b class="name">Approach angle</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill sweeps along heading</span></div>
+    <div class="row"><span class="desc">Fill sweeps along heading</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Backs off to show the angle</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Approach angle">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Approach angle">JS</button></div>
   </figcaption>
 </figure>
@@ -873,7 +967,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-confirm clip" data-p="confirm"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">95</span><b class="name">Hold to confirm</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill grows while you hold</span></div>
+    <div class="row"><span class="desc">Fill grows while you hold</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Hold to confirm">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Hold to confirm">JS</button></div>
   </figcaption>
 </figure>
@@ -881,7 +975,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-depth" data-p="depth"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">96</span><b class="name">Press depth by pressure</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Sinks deeper with pressure</span></div>
+    <div class="row"><span class="desc">Sinks deeper with pressure</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Press depth by pressure">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Press depth by pressure">JS</button></div>
   </figcaption>
 </figure>
@@ -889,7 +983,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dragoff clip" data-p="dragoff"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">97</span><b class="name">Drag-off cancel</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill drains by the exit edge</span></div>
+    <div class="row"><span class="desc">Fill drains by the exit edge</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Drag-off cancel">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Drag-off cancel">JS</button></div>
   </figcaption>
 </figure>
@@ -897,7 +991,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-rebound" data-p="rebound"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">98</span><b class="name">Release bounce</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bounces more the longer held</span></div>
+    <div class="row"><span class="desc">Bounces more the longer held</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Release bounce">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Release bounce">JS</button></div>
   </figcaption>
 </figure>
@@ -905,7 +999,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-throw" data-p="throw"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">99</span><b class="name">Throw</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Drag, release, springs back</span></div>
+    <div class="row"><span class="desc">Drag, release, springs back</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Throw">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Throw">JS</button></div>
   </figcaption>
 </figure>
@@ -921,7 +1015,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-tabfill clip" data-p="tabfill"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">100</span><b class="name">Direction-aware focus</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill follows Tab direction</span></div>
+    <div class="row"><span class="desc">Fill follows Tab direction</span><span class="tag">focus</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Direction-aware focus">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Direction-aware focus">JS</button></div>
   </figcaption>
 </figure>
@@ -929,7 +1023,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-spacebar" data-p="spacebar"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">101</span><b class="name">Key press</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Space or Enter presses it in</span></div>
+    <div class="row"><span class="desc">Space or Enter presses it in</span><span class="tag">key</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Key press">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Key press">JS</button></div>
   </figcaption>
 </figure>
@@ -937,7 +1031,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-fdwell" data-p="fdwell"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">102</span><b class="name">Focus dwell</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bolder while focus rests</span></div>
+    <div class="row"><span class="desc">Bolder while focus rests</span><span class="tag">focus</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Focus dwell">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Focus dwell">JS</button></div>
   </figcaption>
 </figure>
@@ -953,7 +1047,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-tail" data-p="tail"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d="M1 1 L159 1 L159 47 L1 47Z"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">103</span><b class="name">Speech tail</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">A point grows to face you</span></div>
+    <div class="row"><span class="desc">A point grows to face you</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Reaches out to a spike</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Speech tail">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Speech tail">JS</button></div>
   </figcaption>
 </figure>
@@ -961,7 +1056,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-notch" data-p="notch"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d="M1 1 L159 1 L159 47 L1 47Z"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">104</span><b class="name">Notch</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">A bite opens where you touch</span></div>
+    <div class="row"><span class="desc">A bite opens where you touch</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Bite turns out to a bulge</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Notch">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Notch">JS</button></div>
   </figcaption>
 </figure>
@@ -969,7 +1065,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-chamfer" data-p="chamfer"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d="M1 1 L159 1 L159 47 L1 47Z"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">105</span><b class="name">Chamfer</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Nearest corner cuts at 45</span></div>
+    <div class="row"><span class="desc">Nearest corner cuts at 45</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">All four corners cut</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Chamfer">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Chamfer">JS</button></div>
   </figcaption>
 </figure>
@@ -977,7 +1074,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-rounds" data-p="rounds"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d="M1 1 L159 1 L159 47 L1 47Z"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">106</span><b class="name">Nearest corner rounds</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Only the near corner rounds</span></div>
+    <div class="row"><span class="desc">Only the near corner rounds</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Rounds the whole corner off</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Nearest corner rounds">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Nearest corner rounds">JS</button></div>
   </figcaption>
 </figure>
@@ -985,7 +1083,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-shear" data-p="shear"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d="M1 1 L159 1 L159 47 L1 47Z"/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">107</span><b class="name">Parallelogram</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Sides shear by pointer x</span></div>
+    <div class="row"><span class="desc">Sides shear by pointer x</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Shears back the other way</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Parallelogram">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Parallelogram">JS</button></div>
   </figcaption>
 </figure>
@@ -1001,7 +1100,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-jelly" data-p="jelly"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">108</span><b class="name">Jelly</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Outline dents where you poke</span></div>
+    <div class="row"><span class="desc">Outline dents where you poke</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Pulls in instead of out</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Jelly">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Jelly">JS</button></div>
   </figcaption>
 </figure>
@@ -1009,7 +1109,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-pendulum" data-p="pendulum"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">109</span><b class="name">Pendulum</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Hangs, swings when pushed</span></div>
+    <div class="row"><span class="desc">Hangs, swings when pushed</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Caught and held over</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Pendulum">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Pendulum">JS</button></div>
   </figcaption>
 </figure>
@@ -1017,7 +1118,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-rubber" data-p="rubber"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">110</span><b class="name">Rubber band</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Label stretches, snaps back</span></div>
+    <div class="row"><span class="desc">Label stretches, snaps back</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Recoils past rest</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Rubber band">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Rubber band">JS</button></div>
   </figcaption>
 </figure>
@@ -1025,7 +1127,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-thud" data-p="thud"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">111</span><b class="name">Weight drop</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Label lands, bounces once</span></div>
+    <div class="row"><span class="desc">Label lands, bounces once</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Drops the same fall again</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Weight drop">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Weight drop">JS</button></div>
   </figcaption>
 </figure>
@@ -1041,7 +1144,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-become" data-p="become"><span class="label">Button</span><span class="cur" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">112</span><b class="name">Cursor becomes button</b><span class="src">prior art <a href="https://tympanus.net/codrops/2019/01/31/custom-cursor-effects/" target="_blank" rel="noopener">codrops</a></span></div>
-    <div class="row"><span class="desc">Dot grows to fill the button</span></div>
+    <div class="row"><span class="desc">Dot grows to fill the button</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Plate falls back to the dot</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Cursor becomes button">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Cursor becomes button">JS</button></div>
   </figcaption>
 </figure>
@@ -1049,7 +1153,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-sticky" data-p="sticky"><span class="label">Button</span><span class="cur" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">113</span><b class="name">Sticky cursor</b><span class="src">prior art <a href="https://tympanus.net/codrops/2019/01/31/custom-cursor-effects/" target="_blank" rel="noopener">codrops</a></span></div>
-    <div class="row"><span class="desc">Dot lags, snaps to centre</span></div>
+    <div class="row"><span class="desc">Dot lags, snaps to centre</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Lets go onto the press point</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Sticky cursor">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Sticky cursor">JS</button></div>
   </figcaption>
 </figure>
@@ -1057,7 +1162,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-lens" data-p="lens"><span class="label">Button</span><span class="cur" aria-hidden="true"></span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">114</span><b class="name">Inverting cursor</b><span class="src">prior art <a href="https://tympanus.net/codrops/2019/01/31/custom-cursor-effects/" target="_blank" rel="noopener">codrops</a></span></div>
-    <div class="row"><span class="desc">Disc flips at the border</span></div>
+    <div class="row"><span class="desc">Disc flips at the border</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Disc empties to a ring</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Inverting cursor">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Inverting cursor">JS</button></div>
   </figcaption>
 </figure>
@@ -1073,7 +1179,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-curve"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">115</span><b class="name">Spring easing</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Scale springs, three bounces</span></div>
+    <div class="row"><span class="desc">Scale springs, three bounces</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Springs down below rest</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Spring easing">CSS</button></div>
   </figcaption>
 </figure>
@@ -1081,7 +1188,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-conic"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">116</span><b class="name">Conic sweep</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Typed angle sweeps the fill</span></div>
+    <div class="row"><span class="desc">Typed angle sweeps the fill</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Sweeps back to six o&#x27;clock</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Conic sweep">CSS</button></div>
   </figcaption>
 </figure>
@@ -1089,7 +1197,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><span class="fx-peer-mark" aria-hidden="true"></span><button type="button" class="fx fx-peer"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">117</span><b class="name">Sibling reacts</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Prior sibling grows behind</span></div>
+    <div class="row"><span class="desc">Prior sibling grows behind</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Plate spreads further behind</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Sibling reacts">CSS</button></div>
   </figcaption>
 </figure>
@@ -1097,7 +1206,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-emerge"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">118</span><b class="name">Display transition</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Appears out of display:none</span></div>
+    <div class="row"><span class="desc">Appears out of display:none</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Plate grows out to the rule</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Display transition">CSS</button></div>
   </figcaption>
 </figure>
@@ -1105,7 +1215,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-anchor"><span class="label">Button</span></button><span class="fx-anchor-tip" aria-hidden="true"></span></div>
   <figcaption>
     <div class="row"><span class="num">119</span><b class="name">Anchored underline</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Sibling anchored to the box</span></div>
+    <div class="row"><span class="desc">Sibling anchored to the box</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Underline runs past the ends</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Anchored underline">CSS</button></div>
   </figcaption>
 </figure>
@@ -1113,7 +1224,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-quad clip"><span class="label">Button</span><i class="q" aria-hidden="true"></i><i class="q" aria-hidden="true"></i><i class="q" aria-hidden="true"></i><i class="q" aria-hidden="true"></i><span class="qfill" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">120</span><b class="name">Quadrant direction</b><span class="src">new </span></div>
-    <div class="row"><span class="desc">Fill enters from that edge</span></div>
+    <div class="row"><span class="desc">Fill enters from that edge</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Leaves by the quadrant held</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Quadrant direction">CSS</button></div>
   </figcaption>
 </figure>
@@ -1129,7 +1241,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-displace" data-p="displace"><span class="label">Button</span><svg class="fdef" aria-hidden="true"><filter id="f-displace" x="-25%" y="-60%" width="150%" height="220%"><feTurbulence type="fractalNoise" baseFrequency="0.014 0.03" numOctaves="1" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">121</span><b class="name">Displacement by speed</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Warps the faster you move</span></div>
+    <div class="row"><span class="desc">Warps the faster you move</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Warp holds past top speed</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Displacement by speed">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Displacement by speed">JS</button></div>
   </figcaption>
 </figure>
@@ -1137,7 +1250,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-dilate" data-p="dilate"><span class="label">Button</span><svg class="fdef" aria-hidden="true"><filter id="f-dilate" x="-10%" y="-50%" width="120%" height="200%"><feMorphology operator="dilate" radius="0"/></filter></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">122</span><b class="name">Dilate weight</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Strokes dilate as you near</span></div>
+    <div class="row"><span class="desc">Strokes dilate as you near</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Stems take the next step</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Dilate weight">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Dilate weight">JS</button></div>
   </figcaption>
 </figure>
@@ -1145,7 +1259,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-thresh" data-p="thresh"><span class="label">Button</span><svg class="fdef" aria-hidden="true"><filter id="f-thresh" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur in="SourceAlpha" stdDeviation="9"/><feOffset dx="8" dy="8"/><feComponentTransfer result="cut"><feFuncA type="discrete" tableValues="0"/></feComponentTransfer><feMerge><feMergeNode in="cut"/><feMergeNode in="SourceGraphic"/></feMerge></filter></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">123</span><b class="name">Threshold shadow</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Blurred shadow snapped hard</span></div>
+    <div class="row"><span class="desc">Blurred shadow snapped hard</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Cut drops, shadow surfaces</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Threshold shadow">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Threshold shadow">JS</button></div>
   </figcaption>
 </figure>
@@ -1161,7 +1276,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-pending" data-p="pending"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">124</span><b class="name">Pending fill</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Fill creeps to full, clears</span></div>
+    <div class="row"><span class="desc">Fill creeps to full, clears</span><span class="tag">click</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Pending fill">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Pending fill">JS</button></div>
   </figcaption>
 </figure>
@@ -1169,7 +1284,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-check clip" data-p="check"><span class="label">Button</span><svg viewBox="0 0 160 48" aria-hidden="true"><path d=""/></svg></button></div>
   <figcaption>
     <div class="row"><span class="num">125</span><b class="name">Success check</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Check draws from the border</span></div>
+    <div class="row"><span class="desc">Check draws from the border</span><span class="tag">click</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Success check">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Success check">JS</button></div>
   </figcaption>
 </figure>
@@ -1177,7 +1292,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-shake" data-p="shake"><span class="label">Button</span></button></div>
   <figcaption>
     <div class="row"><span class="num">126</span><b class="name">Error settle</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">One shake, then still</span></div>
+    <div class="row"><span class="desc">One shake, then still</span><span class="tag">click</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Error settle">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Error settle">JS</button></div>
   </figcaption>
 </figure>
@@ -1185,7 +1300,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-undo" data-p="undo"><span class="label">Button</span><span class="ink" aria-hidden="true"></span></button></div>
   <figcaption>
     <div class="row"><span class="num">127</span><b class="name">Undo countdown</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Bar drains, click to cancel</span></div>
+    <div class="row"><span class="desc">Bar drains, click to cancel</span><span class="tag">click</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Undo countdown">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Undo countdown">JS</button></div>
   </figcaption>
 </figure>
@@ -1201,7 +1316,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-scramble" data-p="scramble"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">128</span><b class="name">Scramble settle</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Letters cycle then settle</span></div>
+    <div class="row"><span class="desc">Letters cycle then settle</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Scrambles again and holds</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Scramble settle">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Scramble settle">JS</button></div>
   </figcaption>
 </figure>
@@ -1209,7 +1325,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-type" data-p="type"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">129</span><b class="name">Typewriter reveal</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Retypes from the entry side</span></div>
+    <div class="row"><span class="desc">Retypes from the entry side</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Caret grows to a block</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Typewriter reveal">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Typewriter reveal">JS</button></div>
   </figcaption>
 </figure>
@@ -1217,7 +1334,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-swap" data-p="swap"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">130</span><b class="name">Word swap by direction</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">BOUTON from the right half</span></div>
+    <div class="row"><span class="desc">BOUTON from the right half</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Swaps to the other word</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Word swap by direction">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Word swap by direction">JS</button></div>
   </figcaption>
 </figure>
@@ -1225,7 +1343,8 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
   <div class="stage"><button type="button" class="fx fx-case" data-p="case"><span class="label"><i>B</i><i>u</i><i>t</i><i>t</i><i>o</i><i>n</i></span></button></div>
   <figcaption>
     <div class="row"><span class="num">131</span><b class="name">Case morph</b><span class="src">new</span></div>
-    <div class="row"><span class="desc">Lowercase spreads from it</span></div>
+    <div class="row"><span class="desc">Lowercase spreads from it</span><span class="tag">hover</span></div>
+    <div class="row"><span class="desc">Caps return up to the press</span><span class="tag">press</span></div>
     <div class="row codes"><button type="button" class="css-btn" data-kind="css" aria-label="Show CSS for Case morph">CSS</button><button type="button" class="css-btn" data-kind="js" aria-label="Show JavaScript for Case morph">JS</button></div>
   </figcaption>
 </figure>
@@ -1234,6 +1353,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
 <footer>
   <p>Rules: <a href="https://balsamiq.com/blog/button-design-best-practices/">Balsamiq, Button design best practices</a>. Sources: <a href="https://www.testmuai.com/blog/best-css-button-hover-effects/">TestMu AI, CSS button hover effects</a>, pens by ocxigin; <a href="https://menuhover.com/button-hover-styles/">MenuHover, button hover styles</a>.</p>
   <p>Pointer-reactive specimens run one shared pointermove listener and a damped spring per value, so every effect settles instead of snapping, and <code>prefers-reduced-motion</code> disables the engine entirely.</p>
+  <p>Press states: 117 specimens also respond to the pointer going down. Each press is that specimen's own hover taken further, completed, reversed part way or flipped, held while down, back to the hover on release. Space and Enter press the same way.</p>
   <p>Rest state is identical for every specimen. Label stays legible on every frame via mix-blend-mode: difference. Greys occur only inside shadows.</p>
 </footer>
 
@@ -1249,10 +1369,13 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
 <script src="pointer.js"></script>
 <script>
 (function(){
-  var all=document.querySelectorAll('main .fx');
-  document.getElementById('hoverAll').addEventListener('change',function(e){
-    all.forEach(function(b){b.classList.toggle('hov',e.target.checked)});
-  });
+  var all=document.querySelectorAll('main .fx'),hoverAll=document.getElementById('hoverAll'),pressAll=document.getElementById('pressAll');
+  function states(){
+    var h=hoverAll.checked||pressAll.checked,p=pressAll.checked;
+    all.forEach(function(b){b.classList.toggle('hov',h);b.classList.toggle('act',p)});
+  }
+  hoverAll.addEventListener('change',states);
+  pressAll.addEventListener('change',states);
   document.getElementById('slow').addEventListener('change',function(e){
     document.documentElement.style.setProperty('--dur',e.target.checked?4:1);
   });
@@ -1288,7 +1411,7 @@ dialog .dfoot{display:flex;gap:16px;padding:16px 20px;border-top:1px solid var(-
     }
     var out='<!-- markup -->\n'+markup(fig)+'\n\n/* base */\n'+base.join('\n')+'\n\n/* effect */\n'+own.join('\n');
     if(id==='goo')out+='\n\n/* add this filter once */\n'+document.querySelector('#goo').parentNode.outerHTML.replace(/^\s+/gm,'');
-    return out.replace(/:is\(:hover, \.hov\)/g,':hover');
+    return out.replace(/:is\(:hover, \.hov\)/g,':hover').replace(/:is\(:active, \.act\)/g,':active');
   }
   function jsFor(id){
     var pf=window.PFX&&window.PFX[id];if(!pf)return '';
