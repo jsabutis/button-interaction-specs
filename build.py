@@ -429,6 +429,17 @@ PAGE = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Button Hover Specimens</title>
+<meta name="description" content="131 button hover mechanisms on one identical button. Pure CSS and pointer-reactive, each with its own markup and code to copy. No dependencies.">
+<link rel="canonical" href="https://jsabutis.github.io/button-interaction-specs/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jsabutis.github.io/button-interaction-specs/">
+<meta property="og:title" content="Button Hover Specimens">
+<meta property="og:description" content="131 button hover mechanisms on one identical button. Pure CSS and pointer-reactive, each with its own markup and code to copy. No dependencies.">
+<meta property="og:image" content="https://jsabutis.github.io/button-interaction-specs/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A grid of 36 identical buttons, each held in a different hover state, black on white.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
