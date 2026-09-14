@@ -4,13 +4,15 @@
 
 **[Live catalogue](https://jsabutis.github.io/button-interaction-specs/)**
 
+![A pointer crossing rows of identical buttons, each firing its own hover mechanism](media/sweep.gif)
+
 No dependencies, no build step to view: open `index.html`. Every card has a `CSS` button, and pointer-driven cards a `JS` button, that shows that specimen's own markup and code, ready to copy.
 
 Pure CSS where CSS can do it. One `pointermove` listener and a spring integrator where it cannot: pointer position, speed, entry edge, pressure and dwell are not expressible as a hover state.
 
 A style catalogue, not a good-or-bad pattern set: nothing here is a recommendation, and several specimens are deliberately too much for real work.
 
-`index.html` is generated. Edit `build.py` to add an effect, then `python3 build.py`. CSS effects live in `hover.css`; pointer-reactive ones live in `pointer.css` and `pointer.js`. The Google Fonts link needs network; everything else is local.
+`index.html` is generated. Edit `build.py` to add an effect, then `python3 build.py`. The clip above is generated too: `node capture.mjs` drives a real pointer across one row per section over CDP and writes `media/sweep.mp4` and `media/sweep.gif`. It needs Chrome and ffmpeg. CSS effects live in `hover.css`; pointer-reactive ones live in `pointer.css` and `pointer.js`. The Google Fonts link needs network; everything else is local.
 
 131 specimens in fourteen sections, in page order. **Pure CSS** (36): the response is the same wherever the pointer enters and however fast it moves. **Pointer-reactive** (36): the response depends on pointer position, speed or entry edge, so a hover state cannot express it. **Variable font** (14): Inter's `wght` and `opsz` axes, and per-letter transforms, driven by the pointer. **Hatching and halftone** (4): fills built from line and dot density. **Intent and prediction** (4): where the pointer is going. **Press, hold and release** (5), **Keyboard and focus** (3), **Shape morph** (5), **Physics beyond springs** (4), **Cursor** (3), **New CSS, no JavaScript** (6), **SVG filters** (3), **After the press** (4, click states rather than hovers), **Label content** (4). Sections are the `SECTIONS` table in `build.py`; adding one is a list and a row.
 
